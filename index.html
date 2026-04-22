@@ -318,7 +318,7 @@
         const backLight = new THREE.DirectionalLight(0x4361ee, 2); 
         backLight.position.set(-10, 10, -10);
         scene.add(backLight);
-
+        
         // Kendi drone.glb modelini yükle
         const loader = new THREE.GLTFLoader();
         let loadedDrone;
@@ -326,14 +326,27 @@
         loader.load('drone.glb', function (gltf) {
             loadedDrone = gltf.scene;
             
-            // Modeli ortala
+            // 1. Adım: Modelin orijinal devasa boyutlarını ölç
             const box = new THREE.Box3().setFromObject(loadedDrone);
-            const center = box.getCenter(new THREE.Vector3());
+            const size = box.getSize(new THREE.Vector3());
+            
+            // 2. Adım: En geniş eksenini bul (Örn: 1200mm)
+            const maxDim = Math.max(size.x, size.y, size.z);
+            
+            // 3. Adım: Ekranda ne kadar yer kaplamasını istiyoruz? (İdeal: 5 veya 6 birim)
+            const targetSize = 6.0; 
+            const scaleRatio = targetSize / maxDim;
+            
+            // 4. Adım: Modeli mükemmel boyuta küçült (Otomatik Orantı)
+            loadedDrone.scale.set(scaleRatio, scaleRatio, scaleRatio);
+            
+            // 5. Adım: Küçülmüş modeli ekranın tam merkezine oturt
+            const scaledBox = new THREE.Box3().setFromObject(loadedDrone);
+            const center = scaledBox.getCenter(new THREE.Vector3());
             loadedDrone.position.x += (loadedDrone.position.x - center.x);
             loadedDrone.position.y += (loadedDrone.position.y - center.y);
             loadedDrone.position.z += (loadedDrone.position.z - center.z);
             
-            loadedDrone.scale.set(1, 1, 1); // Modelin boyutunu ayarla
             scene.add(loadedDrone);
         }, undefined, function (error) {
             console.error('Model yüklenirken bir hata oluştu:', error);
