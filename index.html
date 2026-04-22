@@ -4,6 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BİLSAS | Bilkent Uzay ve Havacılık Kulübü</title>
+
+    <link rel="icon" type="image/png" href="bilsas_logo_normal.png">
+
+    <meta property="og:title" content="BİLSAS | Bilkent Uzay ve Havacılık Kulübü">
+    <meta property="og:description" content="Mühendislik disiplini ve havacılık tutkusuyla gökyüzünün sınırlarını zorluyoruz.">
+    <meta property="og:image" content="https://deja-vu1.github.io/bilsas_logo_normal.png">
+    <meta property="og:url" content="https://deja-vu1.github.io/">
+    <meta property="og:type" content="website">
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;800&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -99,7 +108,7 @@
         }
         .btn-main:hover { transform: translateY(-3px); background-color: var(--secondary); }
 
-        /* --- DİĞER BÖLÜMLER VE ANİMASYONLAR --- */
+        /* --- DİĞER BÖLÜMLER --- */
         section { padding: 100px 20px; max-width: 1200px; margin: 0 auto; opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
         section.visible { opacity: 1; transform: translateY(0); }
         
@@ -131,7 +140,6 @@
 
         @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Mobilde yan yana değil alt alta görünsünler */
         @media (max-width: 992px) {
             .hero-layout { flex-direction: column; justify-content: center; text-align: center; margin-top: 80px; }
             .hero-text { width: 100%; text-align: center; }
@@ -147,6 +155,7 @@
     <header>
         <div class="logo-container">
             <img src="bilsas_logo_darkmode.png" id="header-logo" alt="BİLSAS Logo">
+            <div class="logo-text">BİLSAS</div>
         </div>
         <nav>
             <ul>
@@ -163,14 +172,12 @@
     <div class="hero">
         <div id="particles-js"></div>
         <div class="hero-overlay"></div>
-        
         <div class="hero-layout">
             <div class="hero-text">
                 <h1>Bilkent Uzay ve <br><span>Havacılık Kulübü</span></h1>
                 <p>Mühendislik disiplini ve havacılık tutkusuyla gökyüzünün sınırlarını zorluyoruz. 3D tasarımımızı inceleyin.</p>
                 <a href="#faaliyetler" class="btn-main">Çalışmalarımızı İncele</a>
             </div>
-
             <div class="hero-3d-area" id="drone-container"></div>
         </div>
     </div>
@@ -278,29 +285,24 @@
             localStorage.setItem('theme', theme); updateLogos(theme);
         });
 
-        // --- 2. SAYFA KAYDIRMA ANİMASYONLARI (TEKRAR EKLENDİ) ---
+        // --- 2. KAYDIRMA ANİMASYONLARI ---
         const sections = document.querySelectorAll('section');
         const observer = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting) { 
-                    entry.target.classList.add('visible'); 
-                    observer.unobserve(entry.target); 
-                }
+                if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); }
             });
         }, { threshold: 0.15, rootMargin: "0px 0px -50px 0px" });
         sections.forEach(section => observer.observe(section));
 
-        // --- 3. PARÇACIKLAR (KAÇMA EFEKTİ) ---
+        // --- 3. PARÇACIKLAR ---
         particlesJS("particles-js", {
             "particles": { "number": { "value": 60 }, "color": { "value": "#ffffff" }, "size": { "value": 2 }, "line_linked": { "enable": true, "distance": 150, "color": "#4361ee", "opacity": 0.3 } },
             "interactivity": { "detect_on": "window", "events": { "onhover": { "enable": true, "mode": "repulse" }, "onclick": { "enable": true, "mode": "push" } }, "modes": { "repulse": { "distance": 120, "duration": 0.4 } } }
         });
 
-        // --- 4. 3D DRONE YÜKLEYİCİ (GLTF) ---
+        // --- 4. OTOMATİK ÖLÇEKLENDİRMELİ 3D DRONE YÜKLEYİCİ ---
         const container = document.getElementById('drone-container');
         const scene = new THREE.Scene();
-        
-        // Kamera (Sağdaki kutuya göre oranlı)
         const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
         camera.position.set(5, 3, 8); 
         
@@ -309,7 +311,6 @@
         renderer.setPixelRatio(window.devicePixelRatio);
         container.appendChild(renderer.domElement);
 
-        // Işıklandırmalar
         const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
         scene.add(ambientLight);
         const dirLight = new THREE.DirectionalLight(0xffffff, 1.5);
@@ -318,29 +319,23 @@
         const backLight = new THREE.DirectionalLight(0x4361ee, 2); 
         backLight.position.set(-10, 10, -10);
         scene.add(backLight);
-        
-        // Kendi drone.glb modelini yükle
+
         const loader = new THREE.GLTFLoader();
         let loadedDrone;
 
         loader.load('drone.glb', function (gltf) {
             loadedDrone = gltf.scene;
             
-            // 1. Adım: Modelin orijinal devasa boyutlarını ölç
+            // Boyut ve Ölçek Analizi
             const box = new THREE.Box3().setFromObject(loadedDrone);
             const size = box.getSize(new THREE.Vector3());
-            
-            // 2. Adım: En geniş eksenini bul (Örn: 1200mm)
             const maxDim = Math.max(size.x, size.y, size.z);
-            
-            // 3. Adım: Ekranda ne kadar yer kaplamasını istiyoruz? (İdeal: 5 veya 6 birim)
             const targetSize = 6.0; 
             const scaleRatio = targetSize / maxDim;
             
-            // 4. Adım: Modeli mükemmel boyuta küçült (Otomatik Orantı)
             loadedDrone.scale.set(scaleRatio, scaleRatio, scaleRatio);
             
-            // 5. Adım: Küçülmüş modeli ekranın tam merkezine oturt
+            // Merkezleme
             const scaledBox = new THREE.Box3().setFromObject(loadedDrone);
             const center = scaledBox.getCenter(new THREE.Vector3());
             loadedDrone.position.x += (loadedDrone.position.x - center.x);
@@ -348,11 +343,8 @@
             loadedDrone.position.z += (loadedDrone.position.z - center.z);
             
             scene.add(loadedDrone);
-        }, undefined, function (error) {
-            console.error('Model yüklenirken bir hata oluştu:', error);
         });
 
-        // Fare ile Çevirme
         const controls = new THREE.OrbitControls(camera, renderer.domElement);
         controls.enableZoom = false; 
         controls.enablePan = false;
@@ -363,19 +355,15 @@
 
         function animate() {
             requestAnimationFrame(animate);
-            
-            // Model havada süzülsün
             if (loadedDrone) {
                 const time = clock.getElapsedTime();
                 loadedDrone.position.y = Math.sin(time * 2) * 0.2; 
             }
-
             controls.update();
             renderer.render(scene, camera);
         }
         animate();
 
-        // Ekran boyutu değişirse kamerayı güncelle
         window.addEventListener('resize', () => {
             camera.aspect = container.clientWidth / container.clientHeight;
             camera.updateProjectionMatrix();
