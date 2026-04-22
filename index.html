@@ -76,13 +76,9 @@
         }
         #theme-toggle:hover { background: var(--primary); color: white; transform: scale(1.05); }
 
-        /* --- HERO & 3D BÖLÜMÜ (DÜZELTİLDİ) --- */
+        /* --- HERO & 3D BÖLÜMÜ --- */
         .hero {
-            /* DÜZELTME: height yerine min-height, ve menünün altına girmesin diye padding eklendi */
-            min-height: 100vh; 
-            padding-top: 100px;
-            padding-bottom: 50px;
-            position: relative;
+            min-height: 100vh; padding-top: 100px; padding-bottom: 50px; position: relative;
             background-image: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1920');
             background-size: cover; background-position: center; background-attachment: fixed;
             overflow: hidden; display: flex; align-items: center;
@@ -101,8 +97,28 @@
         .hero h1 span { color: var(--primary); }
         .hero p { font-size: 1.25rem; color: var(--text-muted); margin-bottom: 35px; }
 
-        .hero-3d-area { width: 55%; height: 80vh; pointer-events: auto; cursor: grab; }
+        /* 3D DRONE VE YAZISI İÇİN KAPSAYICI */
+        .hero-3d-wrapper {
+            width: 55%; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            pointer-events: none;
+        }
+        .hero-3d-area { width: 100%; height: 70vh; pointer-events: auto; cursor: grab; }
         .hero-3d-area:active { cursor: grabbing; }
+
+        /* 2025 Teknofest İHA Yazısı */
+        .model-caption {
+            font-family: 'Poppins', sans-serif;
+            color: var(--primary);
+            font-size: 1.2rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            margin-top: -20px; /* Yazıyı modele yaklaştırmak için */
+            text-transform: uppercase;
+            pointer-events: auto;
+            opacity: 0;
+            animation: fadeUp 1s ease-out 0.8s forwards; /* Modelden hemen sonra yavaşça belirsin */
+            text-shadow: 0 4px 15px rgba(0,0,0,0.4);
+        }
 
         .btn-main {
             display: inline-block; padding: 14px 35px; background: var(--primary); color: white !important;
@@ -138,21 +154,22 @@
         .contact-item:hover { color: var(--primary); }
         .contact-item i { color: var(--secondary); font-size: 1.8rem; }
 
+        /* --- FOOTER VE SAYAÇ --- */
         footer { background: var(--bg-header); padding: 50px 20px; text-align: center; border-top: 1px solid var(--border); transition: background-color 0.4s ease; }
         .footer-logo { height: 60px; margin-bottom: 20px; transition: opacity 0.3s ease; }
+        .visitor-counter { margin-top: 25px; display: inline-block; border-radius: 6px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
 
         @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- MOBİL UYUM (DÜZELTİLDİ) --- */
+        /* --- MOBİL UYUM --- */
         @media (max-width: 992px) {
             .hero-layout { flex-direction: column; justify-content: center; text-align: center; margin-top: 0; padding: 0 20px; }
             .hero-text { width: 100%; text-align: center; margin-top: 20px; }
-            /* Mobilde başlık ve fontlar küçültüldü */
             .hero h1 { font-size: 2.8rem; margin-bottom: 15px; }
             .hero p { font-size: 1.1rem; margin-bottom: 25px; }
-            /* Drone alanı mobilde esnek hale getirildi */
-            .hero-3d-area { width: 100%; height: 45vh; margin-top: 20px; }
-            
+            .hero-3d-wrapper { width: 100%; margin-top: 20px; }
+            .hero-3d-area { width: 100%; height: 45vh; }
+            .model-caption { margin-top: 0; font-size: 1rem; }
             header { padding: 10px 20px; }
             nav ul { display: none; }
             .about-grid { grid-template-columns: 1fr; }
@@ -164,6 +181,7 @@
     <header>
         <div class="logo-container">
             <img src="bilsas_logo_darkmode.png" id="header-logo" alt="BİLSAS Logo">
+            <div class="logo-text">BİLSAS</div>
         </div>
         <nav>
             <ul>
@@ -186,7 +204,11 @@
                 <p>Mühendislik disiplini ve havacılık tutkusuyla gökyüzünün sınırlarını zorluyoruz. 3D tasarımımızı inceleyin.</p>
                 <a href="#faaliyetler" class="btn-main">Çalışmalarımızı İncele</a>
             </div>
-            <div class="hero-3d-area" id="drone-container"></div>
+            
+            <div class="hero-3d-wrapper">
+                <div class="hero-3d-area" id="drone-container"></div>
+                <p class="model-caption">2025 Teknofest İHA</p>
+            </div>
         </div>
     </div>
 
@@ -249,7 +271,7 @@
                     <i class="fab fa-instagram"></i> @bilkentsas
                 </a>
                 <a href="https://www.linkedin.com/company/bilsas/" target="_blank" class="contact-item">
-                    <i class="fab fa-linkedin"></i> Bilsas
+                    <i class="fab fa-linkedin"></i> BİLSAS
                 </a>
             </div>
         </div>
@@ -258,6 +280,10 @@
     <footer>
         <img src="bilsas_logo_darkmode.png" id="footer-logo" alt="BİLSAS Logo" class="footer-logo">
         <p>&copy; 2026 BİLSAS | Bilkent Uzay ve Havacılık Kulübü</p>
+        
+        <div class="visitor-counter">
+            <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fdeja-vu1.github.io&count_bg=%234361EE&title_bg=%230A0A12&icon=&icon_color=%23E7E7E7&title=Z%C4%B0YARET%C3%87%C4%B0&edge_flat=true" alt="Ziyaretçi Sayacı">
+        </div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
