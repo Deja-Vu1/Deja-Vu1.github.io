@@ -4,304 +4,187 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BİLSAS | Bilkent Uzay ve Havacılık Kulübü</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;800&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* --- CSS DEĞİŞKENLERİ (Tema Ayarları) --- */
+        /* --- TEMA DEĞİŞKENLERİ --- */
         :root {
-            --bg-color: #f4f4f9;
-            --text-color: #1a1a2e;
-            --primary-color: #0f3460;
-            --secondary-color: #e94560;
-            --card-bg: #ffffff;
-            --header-bg: rgba(255, 255, 255, 0.9);
-            --border-color: #dddddd;
-            --shadow: 0 4px 6px rgba(0,0,0,0.05);
+            --bg-body: #0a0a12;
+            --bg-card: rgba(26, 26, 46, 0.6);
+            --bg-header: rgba(10, 10, 18, 0.9);
+            --text-main: #e0e0e0;
+            --text-muted: #a0a0b0;
+            --primary: #4361ee;
+            --secondary: #e94560;
+            --border: rgba(255, 255, 255, 0.08);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            --hero-overlay: rgba(10, 10, 18, 0.75);
         }
 
-        [data-theme="dark"] {
-            --bg-color: #1a1a2e;
-            --text-color: #e0e0e0;
-            --primary-color: #4361ee;
-            --secondary-color: #e94560;
-            --card-bg: #16213e;
-            --header-bg: rgba(26, 26, 46, 0.9);
-            --border-color: #2a2a4a;
-            --shadow: 0 4px 6px rgba(0,0,0,0.3);
+        body.light-mode {
+            --bg-body: #f4f7f6;
+            --bg-card: rgba(255, 255, 255, 0.8);
+            --bg-header: rgba(255, 255, 255, 0.95);
+            --text-main: #1a1a2e;
+            --text-muted: #505060;
+            --primary: #3f37c9;
+            --secondary: #d90429;
+            --border: rgba(0, 0, 0, 0.05);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+            --hero-overlay: rgba(255, 255, 255, 0.6);
         }
 
-        /* --- GENEL SIFIRLAMA VE TİPOGRAFİ --- */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
+        /* --- GENEL AYARLAR --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-body); color: var(--text-main); line-height: 1.6; overflow-x: hidden; transition: background-color 0.4s ease, color 0.4s ease; }
+        html { scroll-behavior: smooth; }
+        a { text-decoration: none !important; color: inherit; transition: color 0.3s ease; }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            line-height: 1.6;
-        }
-
-        a {
-            text-decoration: none;
-            color: var(--primary-color);
-        }
-
-        /* --- HEADER VE NAVİGASYON --- */
+        /* --- HEADER --- */
         header {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            background: var(--header-bg);
-            backdrop-filter: blur(10px);
-            padding: 20px 50px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 1000;
-            border-bottom: 1px solid var(--border-color);
+            position: fixed; top: 0; width: 100%;
+            background: var(--bg-header); backdrop-filter: blur(12px);
+            padding: 10px 50px; display: flex;
+            justify-content: space-between; align-items: center;
+            z-index: 1000; border-bottom: 1px solid var(--border);
+            transition: background-color 0.4s ease, border-color 0.4s ease;
         }
 
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 800;
-            letter-spacing: 2px;
-            color: var(--primary-color);
-        }
+        .logo-container { display: flex; align-items: center; gap: 10px; }
+        .logo-container img { height: 50px; width: auto; object-fit: contain; transition: opacity 0.3s ease; }
+        .logo-text { font-family: 'Poppins', sans-serif; font-size: 1.5rem; font-weight: 800; letter-spacing: 1px; color: var(--primary); }
 
-        nav ul {
-            list-style: none;
-            display: flex;
-            gap: 30px;
-            align-items: center;
-        }
-
-        nav a {
-            font-weight: 600;
-            color: var(--text-color);
-            transition: color 0.2s;
-        }
-
-        nav a:hover {
-            color: var(--primary-color);
-        }
+        nav { display: flex; align-items: center; gap: 30px; }
+        nav ul { list-style: none; display: flex; gap: 25px; align-items: center; }
+        nav a { font-weight: 600; font-size: 0.95rem; color: var(--text-main); }
+        nav a:hover { color: var(--primary); }
 
         #theme-toggle {
-            background: none;
-            border: none;
-            color: var(--text-color);
-            font-size: 1.2rem;
-            cursor: pointer;
-            outline: none;
+            background: var(--bg-card); border: 1px solid var(--border); color: var(--text-main);
+            width: 40px; height: 40px; border-radius: 10px; cursor: pointer;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 1.1rem; box-shadow: var(--shadow); transition: all 0.3s ease;
         }
+        #theme-toggle:hover { background: var(--primary); color: white; transform: scale(1.05); }
 
-        /* --- HERO BÖLÜMÜ --- */
+        /* --- HERO & 3D BÖLÜMÜ --- */
         .hero {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 0 20px;
-            background: linear-gradient(135deg, var(--bg-color) 0%, var(--card-bg) 100%);
+            height: 100vh; position: relative;
+            background-image: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1920');
+            background-size: cover; background-position: center; background-attachment: fixed;
+            overflow: hidden; display: flex; align-items: center;
+        }
+        
+        #particles-js { position: absolute; width: 100%; height: 100%; top: 0; left: 0; z-index: 1; }
+        .hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--hero-overlay); z-index: 2; pointer-events: none; transition: background-color 0.4s ease; }
+        
+        .hero-layout {
+            position: relative; z-index: 3; display: flex; align-items: center; justify-content: space-between;
+            width: 100%; max-width: 1400px; margin: 0 auto; padding: 0 50px; height: 100%; pointer-events: none;
         }
 
-        .hero h1 {
-            font-size: 4rem;
-            margin-bottom: 20px;
-            color: var(--text-color);
-        }
+        .hero-text { width: 45%; pointer-events: auto; text-align: left; opacity: 0; animation: fadeUp 1s ease-out 0.3s forwards; }
+        .hero h1 { font-family: 'Poppins', sans-serif; font-size: 4.2rem; line-height: 1.1; margin-bottom: 20px; }
+        .hero h1 span { color: var(--primary); }
+        .hero p { font-size: 1.25rem; color: var(--text-muted); margin-bottom: 35px; }
 
-        .hero h1 span {
-            color: var(--primary-color);
-        }
+        .hero-3d-area { width: 55%; height: 80vh; pointer-events: auto; cursor: grab; }
+        .hero-3d-area:active { cursor: grabbing; }
 
-        .hero p {
-            font-size: 1.2rem;
-            max-width: 600px;
-            opacity: 0.8;
-            margin-bottom: 30px;
+        .btn-main {
+            display: inline-block; padding: 14px 35px; background: var(--primary); color: white !important;
+            border-radius: 50px; font-weight: 700; box-shadow: 0 4px 15px rgba(67, 97, 238, 0.4);
+            transition: transform 0.3s ease, background-color 0.3s ease;
         }
+        .btn-main:hover { transform: translateY(-3px); background-color: var(--secondary); }
 
-        /* --- İÇERİK BÖLÜMLERİ GENEL --- */
-        section {
-            padding: 100px 50px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+        /* --- DİĞER BÖLÜMLER VE ANİMASYONLAR --- */
+        section { padding: 100px 20px; max-width: 1200px; margin: 0 auto; opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
+        section.visible { opacity: 1; transform: translateY(0); }
+        
+        .section-title { text-align: center; font-family: 'Poppins', sans-serif; font-size: 2.8rem; margin-bottom: 60px; }
+        .section-title::after { content: ''; width: 70px; height: 5px; background: var(--primary); display: block; margin: 15px auto 0; border-radius: 10px; }
 
-        .section-title {
-            text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 50px;
-            position: relative;
-        }
+        .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        .about-card { background: var(--bg-card); padding: 40px; border-radius: 20px; border: 1px solid var(--border); backdrop-filter: blur(10px); transition: transform 0.3s ease, background-color 0.4s ease; }
+        .about-card:hover { transform: translateY(-5px); }
+        .about-card h3 { color: var(--primary); margin-bottom: 15px; font-size: 1.8rem; display: flex; align-items: center; gap: 10px; }
 
-        .section-title::after {
-            content: '';
-            width: 60px;
-            height: 4px;
-            background: var(--primary-color);
-            display: block;
-            margin: 15px auto 0;
-            border-radius: 2px;
-        }
+        .activities-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; }
+        .activity-card { background: var(--bg-card); border-radius: 20px; overflow: hidden; border: 1px solid var(--border); box-shadow: var(--shadow); transition: transform 0.3s ease, background-color 0.4s ease; }
+        .activity-card:hover { transform: translateY(-10px); }
+        .img-container { width: 100%; height: 220px; overflow: hidden; }
+        .img-container img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+        .activity-card:hover .img-container img { transform: scale(1.08); }
+        .activity-content { padding: 25px; }
+        .activity-content h3 { margin-bottom: 10px; font-size: 1.4rem; }
 
-        /* --- VİZYON VE MİSYON --- */
-        .about-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-        }
+        .contact-card { background: var(--bg-card); padding: 50px; border-radius: 25px; text-align: center; border: 1px solid var(--border); transition: background-color 0.4s ease; }
+        .contact-links { display: flex; justify-content: center; gap: 40px; margin-top: 30px; flex-wrap: wrap; }
+        .contact-item { display: flex; align-items: center; gap: 12px; font-size: 1.1rem; font-weight: 600; color: var(--text-main); }
+        .contact-item:hover { color: var(--primary); }
+        .contact-item i { color: var(--secondary); font-size: 1.8rem; }
 
-        .about-card {
-            background: var(--card-bg);
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border-color);
-        }
+        footer { background: var(--bg-header); padding: 50px 20px; text-align: center; border-top: 1px solid var(--border); transition: background-color 0.4s ease; }
+        .footer-logo { height: 60px; margin-bottom: 20px; transition: opacity 0.3s ease; }
 
-        .about-card h3 {
-            font-size: 1.8rem;
-            margin-bottom: 20px;
-            color: var(--primary-color);
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- FAALİYETLERİMİZ --- */
-        .activities-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-        }
-
-        .activity-card {
-            background: var(--card-bg);
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border-color);
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Resim Alanları İçin Yer Tutucu */
-        .activity-img {
-            width: 100%;
-            height: 200px;
-            background-color: var(--border-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: var(--text-color);
-            font-size: 0.9rem;
-            opacity: 0.6;
-            /* background-image: url('senin-resmin.jpg'); 
-               Resimleri eklerken bu yorum satırını kaldırıp dosya yolunu verebilirsin */
-            background-size: cover;
-            background-position: center;
-        }
-
-        .activity-content {
-            padding: 30px;
-            flex-grow: 1;
-        }
-
-        .activity-content h3 {
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-            color: var(--text-color);
-        }
-
-        /* --- İLETİŞİM --- */
-        .contact {
-            text-align: center;
-            background: var(--card-bg);
-            padding: 60px 20px;
-            border-radius: 12px;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border-color);
-        }
-
-        .contact-info {
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            margin-top: 30px;
-            flex-wrap: wrap;
-        }
-
-        .contact-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 1.2rem;
-            font-weight: 600;
-        }
-
-        .contact-item i {
-            color: var(--secondary-color);
-            font-size: 1.8rem;
-        }
-
-        /* --- FOOTER --- */
-        footer {
-            text-align: center;
-            padding: 30px;
-            background: var(--header-bg);
-            border-top: 1px solid var(--border-color);
-            font-size: 0.9rem;
-            opacity: 0.8;
-        }
-
-        /* --- MOBİL UYUM (RESPONSIVE) --- */
-        @media (max-width: 768px) {
-            header { padding: 20px; }
-            nav ul { gap: 15px; display: none; /* Mobilde menüyü basit tutmak için gizlendi */ }
-            .hero h1 { font-size: 2.5rem; }
+        /* Mobilde yan yana değil alt alta görünsünler */
+        @media (max-width: 992px) {
+            .hero-layout { flex-direction: column; justify-content: center; text-align: center; margin-top: 80px; }
+            .hero-text { width: 100%; text-align: center; }
+            .hero-3d-area { width: 100%; height: 50vh; margin-top: 30px; }
+            header { padding: 10px 20px; }
+            nav ul { display: none; }
             .about-grid { grid-template-columns: 1fr; }
-            section { padding: 60px 20px; }
         }
     </style>
 </head>
-<body data-theme="dark"> <header>
-        <div class="logo">BİLSAS</div>
+<body>
+
+    <header>
+        <div class="logo-container">
+            <img src="bilsas_logo_darkmode.png" id="header-logo" alt="BİLSAS Logo">
+        </div>
         <nav>
             <ul>
                 <li><a href="#hakkimizda">Hakkımızda</a></li>
                 <li><a href="#faaliyetler">Faaliyetlerimiz</a></li>
                 <li><a href="#iletisim">İletişim</a></li>
             </ul>
-            <button id="theme-toggle" aria-label="Tema Değiştir">
-                <i class="fas fa-sun" id="theme-icon"></i>
+            <button id="theme-toggle" title="Temayı Değiştir">
+                <i class="fas fa-moon" id="theme-icon"></i>
             </button>
         </nav>
     </header>
 
-    <section class="hero">
-        <h1>Bilkent Uzay ve <br><span>Havacılık Kulübü</span></h1>
-        <p>Geleceğin mühendislik çözümlerini tasarlıyor, sınırları gökyüzünün ötesine taşıyoruz.</p>
-        <a href="#hakkimizda" class="scroll-down"><i class="fas fa-chevron-down" style="font-size: 2rem; color: var(--primary-color); margin-top: 20px; animation: bounce 2s infinite;"></i></a>
-    </section>
+    <div class="hero">
+        <div id="particles-js"></div>
+        <div class="hero-overlay"></div>
+        
+        <div class="hero-layout">
+            <div class="hero-text">
+                <h1>Bilkent Uzay ve <br><span>Havacılık Kulübü</span></h1>
+                <p>Mühendislik disiplini ve havacılık tutkusuyla gökyüzünün sınırlarını zorluyoruz. 3D tasarımımızı inceleyin.</p>
+                <a href="#faaliyetler" class="btn-main">Çalışmalarımızı İncele</a>
+            </div>
+
+            <div class="hero-3d-area" id="drone-container"></div>
+        </div>
+    </div>
 
     <section id="hakkimizda">
         <h2 class="section-title">Hakkımızda</h2>
         <div class="about-grid">
             <div class="about-card">
                 <h3><i class="fas fa-eye"></i> Vizyonumuz</h3>
-                <p>Gökyüzünün ötesini hedefleyen vizyonumuzla, uzay ve havacılık teknolojileri alanında ulusal ve uluslararası ölçekte öncü projelere imza atmak; inovasyon odaklı, yenilikçi ve donanımlı mühendis adaylarını bir araya getirerek Türkiye'nin havacılık ekosistemine yön vermektir.</p>
+                <p>Havacılık ve uzay teknolojilerinde yerli ve milli çözümler üretebilecek, uluslararası arenada rekabetçi mühendislik yetkinliğine sahip bir topluluk olmayı hedefliyoruz.</p>
             </div>
             <div class="about-card">
                 <h3><i class="fas fa-rocket"></i> Misyonumuz</h3>
-                <p>Üniversitemizde havacılık kültürünü yaygınlaştırmak, teorik bilgileri pratiğe döken drone, roket tasarımı ve model uçak projeleriyle üyelerimizin teknik yetkinliklerini artırmak; alanındaki güncel teknolojileri takip ederek takım çalışmasına yatkın yetenekler yetiştirmektir.</p>
+                <p>Bilkent Üniversitesi öğrencilerinin teknik becerilerini projelerle geliştirmek, havacılık kültürünü yaymak ve sektör profesyonelleri ile köprü kurmak için çalışıyoruz.</p>
             </div>
         </div>
     </section>
@@ -309,46 +192,41 @@
     <section id="faaliyetler">
         <h2 class="section-title">Neler Yapıyoruz?</h2>
         <div class="activities-grid">
-            
             <div class="activity-card">
-                <div class="activity-img" style="background-image: url('');">
-                    [Organizasyon Resmi Buraya Gelecek]
+                <div class="img-container">
+                    <img src="organizasyon_teknofest.JPG" alt="Teknofest" onerror="this.src='https://via.placeholder.com/400x250?text=Teknofest'">
                 </div>
                 <div class="activity-content">
                     <h3>Organizasyonlar</h3>
-                    <p>Davet edildiğimiz ulusal ve uluslararası prestijli yarışmalar, teknik fuarlar ve havacılık festivallerindeki (SkyFest vb.) stant çalışmalarımız ile projelerimizi sergiliyoruz.</p>
+                    <p>Teknofest gibi ulusal yarışmalarda yer alıyor, projelerimizi stantlarda havacılık tutkunlarıyla paylaşıyoruz.</p>
                 </div>
             </div>
-
             <div class="activity-card">
-                <div class="activity-img" style="background-image: url('');">
-                    [Seminer Resmi Buraya Gelecek]
+                <div class="img-container">
+                    <img src="sunum_iha.jpg" alt="IHA Sunumu" onerror="this.src='https://via.placeholder.com/400x250?text=Sunum'">
                 </div>
                 <div class="activity-content">
                     <h3>Seminerler</h3>
-                    <p>Bilkent Üniversitesi çatısı altında, sektör profesyonellerini, mühendisleri ve alanında uzman akademisyenleri ağırlayarak vizyon açıcı bilgilendirme toplantıları düzenliyoruz.</p>
+                    <p>İHA teknolojileri ve sektörün geleceği üzerine teknik seminerler ve sunumlar düzenliyoruz.</p>
                 </div>
             </div>
-
             <div class="activity-card">
-                <div class="activity-img" style="background-image: url('');">
-                    [Workshop Resmi Buraya Gelecek]
+                <div class="img-container">
+                    <img src="workshop_iha.JPG" alt="Workshop" onerror="this.src='https://via.placeholder.com/400x250?text=Workshop'">
                 </div>
                 <div class="activity-content">
                     <h3>Workshoplar</h3>
-                    <p>Bilkent Üniversitesi'ndeki atölyemizde; aerodinamik, elektronik entegrasyonlar, FPV sistemleri ve mekanik tasarım üzerine uygulamalı (hands-on) mühendislik çalışmaları gerçekleştiriyoruz.</p>
+                    <p>Atölyemizde birebir mühendislik deneyimi sunan İHA montaj ve tasarım workshopları gerçekleştiriyoruz.</p>
                 </div>
             </div>
-
         </div>
     </section>
 
     <section id="iletisim">
-        <div class="contact">
-            <h2 class="section-title" style="margin-bottom: 20px;">Bizimle İletişime Geçin</h2>
-            <p>Projelerimiz hakkında bilgi almak veya işbirliği için bize ulaşabilirsiniz.</p>
-            
-            <div class="contact-info">
+        <div class="contact-card">
+            <h2 class="section-title" style="margin-bottom: 20px;">Bizimle Tanışın</h2>
+            <p>BİLSAS ailesine katılmak veya projelerimize destek olmak için bize ulaşın.</p>
+            <div class="contact-links">
                 <a href="mailto:info@bilkentsas.com" class="contact-item">
                     <i class="fas fa-envelope"></i> info@bilkentsas.com
                 </a>
@@ -360,35 +238,136 @@
     </section>
 
     <footer>
-        <p>&copy; 2026 BİLSAS (Bilkent Uzay ve Havacılık Kulübü). Tüm hakları saklıdır.</p>
+        <img src="bilsas_logo_darkmode.png" id="footer-logo" alt="BİLSAS Logo" class="footer-logo">
+        <p>&copy; 2026 BİLSAS | Bilkent Uzay ve Havacılık Kulübü</p>
     </footer>
 
-    <script>
-        // Tema Değiştirme Mantığı
-        const themeToggleBtn = document.getElementById('theme-toggle');
-        const themeIcon = document.getElementById('theme-icon');
-        
-        // Cihazın yerel deposundan mevcut temayı al, yoksa "dark" olarak ayarla
-        const savedTheme = localStorage.getItem('bilsas-theme') || 'dark';
-        document.documentElement.setAttribute('data-theme', savedTheme);
-        updateIcon(savedTheme);
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 
-        themeToggleBtn.addEventListener('click', () => {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            
-            document.documentElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('bilsas-theme', newTheme);
-            updateIcon(newTheme);
+    <script>
+        // --- 1. TEMA VE LOGO SİSTEMİ ---
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+        const headerLogo = document.getElementById('header-logo');
+        const footerLogo = document.getElementById('footer-logo');
+        const body = document.body;
+
+        function updateLogos(theme) {
+            headerLogo.style.opacity = '0'; footerLogo.style.opacity = '0';
+            setTimeout(() => {
+                if (theme === 'light') {
+                    headerLogo.src = 'bilsas_logo_normal.png'; footerLogo.src = 'bilsas_logo_normal.png';
+                } else {
+                    headerLogo.src = 'bilsas_logo_darkmode.png'; footerLogo.src = 'bilsas_logo_darkmode.png';
+                }
+                headerLogo.style.opacity = '1'; footerLogo.style.opacity = '1';
+            }, 150);
+        }
+
+        const currentTheme = localStorage.getItem('theme') || 'dark';
+        if (currentTheme === 'light') { body.classList.add('light-mode'); themeIcon.className = 'fas fa-sun'; updateLogos('light'); } 
+        else { updateLogos('dark'); }
+
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('light-mode'); let theme = 'dark';
+            if (body.classList.contains('light-mode')) { theme = 'light'; themeIcon.className = 'fas fa-sun'; } 
+            else { themeIcon.className = 'fas fa-moon'; }
+            localStorage.setItem('theme', theme); updateLogos(theme);
         });
 
-        function updateIcon(theme) {
-            if (theme === 'dark') {
-                themeIcon.className = 'fas fa-sun'; // Koyu temadaysa, aydınlığa geçiş için güneş ikonu göster
-            } else {
-                themeIcon.className = 'fas fa-moon'; // Aydınlık temadaysa, koyuya geçiş için ay ikonu göster
+        // --- 2. SAYFA KAYDIRMA ANİMASYONLARI (TEKRAR EKLENDİ) ---
+        const sections = document.querySelectorAll('section');
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) { 
+                    entry.target.classList.add('visible'); 
+                    observer.unobserve(entry.target); 
+                }
+            });
+        }, { threshold: 0.15, rootMargin: "0px 0px -50px 0px" });
+        sections.forEach(section => observer.observe(section));
+
+        // --- 3. PARÇACIKLAR (KAÇMA EFEKTİ) ---
+        particlesJS("particles-js", {
+            "particles": { "number": { "value": 60 }, "color": { "value": "#ffffff" }, "size": { "value": 2 }, "line_linked": { "enable": true, "distance": 150, "color": "#4361ee", "opacity": 0.3 } },
+            "interactivity": { "detect_on": "window", "events": { "onhover": { "enable": true, "mode": "repulse" }, "onclick": { "enable": true, "mode": "push" } }, "modes": { "repulse": { "distance": 120, "duration": 0.4 } } }
+        });
+
+        // --- 4. 3D DRONE YÜKLEYİCİ (GLTF) ---
+        const container = document.getElementById('drone-container');
+        const scene = new THREE.Scene();
+        
+        // Kamera (Sağdaki kutuya göre oranlı)
+        const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
+        camera.position.set(5, 3, 8); 
+        
+        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        container.appendChild(renderer.domElement);
+
+        // Işıklandırmalar
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+        scene.add(ambientLight);
+        const dirLight = new THREE.DirectionalLight(0xffffff, 1.5);
+        dirLight.position.set(10, 20, 10);
+        scene.add(dirLight);
+        const backLight = new THREE.DirectionalLight(0x4361ee, 2); 
+        backLight.position.set(-10, 10, -10);
+        scene.add(backLight);
+
+        // Kendi drone.glb modelini yükle
+        const loader = new THREE.GLTFLoader();
+        let loadedDrone;
+
+        loader.load('drone.glb', function (gltf) {
+            loadedDrone = gltf.scene;
+            
+            // Modeli ortala
+            const box = new THREE.Box3().setFromObject(loadedDrone);
+            const center = box.getCenter(new THREE.Vector3());
+            loadedDrone.position.x += (loadedDrone.position.x - center.x);
+            loadedDrone.position.y += (loadedDrone.position.y - center.y);
+            loadedDrone.position.z += (loadedDrone.position.z - center.z);
+            
+            loadedDrone.scale.set(1, 1, 1); // Modelin boyutunu ayarla
+            scene.add(loadedDrone);
+        }, undefined, function (error) {
+            console.error('Model yüklenirken bir hata oluştu:', error);
+        });
+
+        // Fare ile Çevirme
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableZoom = false; 
+        controls.enablePan = false;
+        controls.autoRotate = true; 
+        controls.autoRotateSpeed = 2.0;
+
+        const clock = new THREE.Clock();
+
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            // Model havada süzülsün
+            if (loadedDrone) {
+                const time = clock.getElapsedTime();
+                loadedDrone.position.y = Math.sin(time * 2) * 0.2; 
             }
+
+            controls.update();
+            renderer.render(scene, camera);
         }
+        animate();
+
+        // Ekran boyutu değişirse kamerayı güncelle
+        window.addEventListener('resize', () => {
+            camera.aspect = container.clientWidth / container.clientHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(container.clientWidth, container.clientHeight);
+        });
     </script>
 </body>
 </html>
