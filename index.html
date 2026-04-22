@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BİLSAS | Bilkent Uzay ve Havacılık Kulübü</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* --- CSS DEĞİŞKENLERİ (Tema Ayarları) --- */
+        :root {
+            --bg-color: #f4f4f9;
+            --text-color: #1a1a2e;
+            --primary-color: #0f3460;
+            --secondary-color: #e94560;
+            --card-bg: #ffffff;
+            --header-bg: rgba(255, 255, 255, 0.9);
+            --border-color: #dddddd;
+            --shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #1a1a2e;
+            --text-color: #e0e0e0;
+            --primary-color: #4361ee;
+            --secondary-color: #e94560;
+            --card-bg: #16213e;
+            --header-bg: rgba(26, 26, 46, 0.9);
+            --border-color: #2a2a4a;
+            --shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+
+        /* --- GENEL SIFIRLAMA VE TİPOGRAFİ --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        a {
+            text-decoration: none;
+            color: var(--primary-color);
+        }
+
+        /* --- HEADER VE NAVİGASYON --- */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: var(--header-bg);
+            backdrop-filter: blur(10px);
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: var(--primary-color);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        nav a {
+            font-weight: 600;
+            color: var(--text-color);
+            transition: color 0.2s;
+        }
+
+        nav a:hover {
+            color: var(--primary-color);
+        }
+
+        #theme-toggle {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-size: 1.2rem;
+            cursor: pointer;
+            outline: none;
+        }
+
+        /* --- HERO BÖLÜMÜ --- */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+            background: linear-gradient(135deg, var(--bg-color) 0%, var(--card-bg) 100%);
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: var(--text-color);
+        }
+
+        .hero h1 span {
+            color: var(--primary-color);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            opacity: 0.8;
+            margin-bottom: 30px;
+        }
+
+        /* --- İÇERİK BÖLÜMLERİ GENEL --- */
+        section {
+            padding: 100px 50px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            width: 60px;
+            height: 4px;
+            background: var(--primary-color);
+            display: block;
+            margin: 15px auto 0;
+            border-radius: 2px;
+        }
+
+        /* --- VİZYON VE MİSYON --- */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .about-card {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .about-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        /* --- FAALİYETLERİMİZ --- */
+        .activities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .activity-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Resim Alanları İçin Yer Tutucu */
+        .activity-img {
+            width: 100%;
+            height: 200px;
+            background-color: var(--border-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--text-color);
+            font-size: 0.9rem;
+            opacity: 0.6;
+            /* background-image: url('senin-resmin.jpg'); 
+               Resimleri eklerken bu yorum satırını kaldırıp dosya yolunu verebilirsin */
+            background-size: cover;
+            background-position: center;
+        }
+
+        .activity-content {
+            padding: 30px;
+            flex-grow: 1;
+        }
+
+        .activity-content h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--text-color);
+        }
+
+        /* --- İLETİŞİM --- */
+        .contact {
+            text-align: center;
+            background: var(--card-bg);
+            padding: 60px 20px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+        }
+
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .contact-item i {
+            color: var(--secondary-color);
+            font-size: 1.8rem;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            text-align: center;
+            padding: 30px;
+            background: var(--header-bg);
+            border-top: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* --- MOBİL UYUM (RESPONSIVE) --- */
+        @media (max-width: 768px) {
+            header { padding: 20px; }
+            nav ul { gap: 15px; display: none; /* Mobilde menüyü basit tutmak için gizlendi */ }
+            .hero h1 { font-size: 2.5rem; }
+            .about-grid { grid-template-columns: 1fr; }
+            section { padding: 60px 20px; }
+        }
+    </style>
+</head>
+<body data-theme="dark"> <header>
+        <div class="logo">BİLSAS</div>
+        <nav>
+            <ul>
+                <li><a href="#hakkimizda">Hakkımızda</a></li>
+                <li><a href="#faaliyetler">Faaliyetlerimiz</a></li>
+                <li><a href="#iletisim">İletişim</a></li>
+            </ul>
+            <button id="theme-toggle" aria-label="Tema Değiştir">
+                <i class="fas fa-sun" id="theme-icon"></i>
+            </button>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h1>Bilkent Uzay ve <br><span>Havacılık Kulübü</span></h1>
+        <p>Geleceğin mühendislik çözümlerini tasarlıyor, sınırları gökyüzünün ötesine taşıyoruz.</p>
+        <a href="#hakkimizda" class="scroll-down"><i class="fas fa-chevron-down" style="font-size: 2rem; color: var(--primary-color); margin-top: 20px; animation: bounce 2s infinite;"></i></a>
+    </section>
+
+    <section id="hakkimizda">
+        <h2 class="section-title">Hakkımızda</h2>
+        <div class="about-grid">
+            <div class="about-card">
+                <h3><i class="fas fa-eye"></i> Vizyonumuz</h3>
+                <p>Gökyüzünün ötesini hedefleyen vizyonumuzla, uzay ve havacılık teknolojileri alanında ulusal ve uluslararası ölçekte öncü projelere imza atmak; inovasyon odaklı, yenilikçi ve donanımlı mühendis adaylarını bir araya getirerek Türkiye'nin havacılık ekosistemine yön vermektir.</p>
+            </div>
+            <div class="about-card">
+                <h3><i class="fas fa-rocket"></i> Misyonumuz</h3>
+                <p>Üniversitemizde havacılık kültürünü yaygınlaştırmak, teorik bilgileri pratiğe döken drone, roket tasarımı ve model uçak projeleriyle üyelerimizin teknik yetkinliklerini artırmak; alanındaki güncel teknolojileri takip ederek takım çalışmasına yatkın yetenekler yetiştirmektir.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="faaliyetler">
+        <h2 class="section-title">Neler Yapıyoruz?</h2>
+        <div class="activities-grid">
+            
+            <div class="activity-card">
+                <div class="activity-img" style="background-image: url('');">
+                    [Organizasyon Resmi Buraya Gelecek]
+                </div>
+                <div class="activity-content">
+                    <h3>Organizasyonlar</h3>
+                    <p>Davet edildiğimiz ulusal ve uluslararası prestijli yarışmalar, teknik fuarlar ve havacılık festivallerindeki (SkyFest vb.) stant çalışmalarımız ile projelerimizi sergiliyoruz.</p>
+                </div>
+            </div>
+
+            <div class="activity-card">
+                <div class="activity-img" style="background-image: url('');">
+                    [Seminer Resmi Buraya Gelecek]
+                </div>
+                <div class="activity-content">
+                    <h3>Seminerler</h3>
+                    <p>Bilkent Üniversitesi çatısı altında, sektör profesyonellerini, mühendisleri ve alanında uzman akademisyenleri ağırlayarak vizyon açıcı bilgilendirme toplantıları düzenliyoruz.</p>
+                </div>
+            </div>
+
+            <div class="activity-card">
+                <div class="activity-img" style="background-image: url('');">
+                    [Workshop Resmi Buraya Gelecek]
+                </div>
+                <div class="activity-content">
+                    <h3>Workshoplar</h3>
+                    <p>Bilkent Üniversitesi'ndeki atölyemizde; aerodinamik, elektronik entegrasyonlar, FPV sistemleri ve mekanik tasarım üzerine uygulamalı (hands-on) mühendislik çalışmaları gerçekleştiriyoruz.</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section id="iletisim">
+        <div class="contact">
+            <h2 class="section-title" style="margin-bottom: 20px;">Bizimle İletişime Geçin</h2>
+            <p>Projelerimiz hakkında bilgi almak veya işbirliği için bize ulaşabilirsiniz.</p>
+            
+            <div class="contact-info">
+                <a href="mailto:info@bilkentsas.com" class="contact-item">
+                    <i class="fas fa-envelope"></i> info@bilkentsas.com
+                </a>
+                <a href="https://instagram.com/bilkentsas" target="_blank" class="contact-item">
+                    <i class="fab fa-instagram"></i> @bilkentsas
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 BİLSAS (Bilkent Uzay ve Havacılık Kulübü). Tüm hakları saklıdır.</p>
+    </footer>
+
+    <script>
+        // Tema Değiştirme Mantığı
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+        
+        // Cihazın yerel deposundan mevcut temayı al, yoksa "dark" olarak ayarla
+        const savedTheme = localStorage.getItem('bilsas-theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        updateIcon(savedTheme);
+
+        themeToggleBtn.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('bilsas-theme', newTheme);
+            updateIcon(newTheme);
+        });
+
+        function updateIcon(theme) {
+            if (theme === 'dark') {
+                themeIcon.className = 'fas fa-sun'; // Koyu temadaysa, aydınlığa geçiş için güneş ikonu göster
+            } else {
+                themeIcon.className = 'fas fa-moon'; // Aydınlık temadaysa, koyuya geçiş için ay ikonu göster
+            }
+        }
+    </script>
+</body>
+</html>
