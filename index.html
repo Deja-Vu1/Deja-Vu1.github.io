@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <title>BİLSAS | Bilkent Uzay ve Havacılık Kulübü</title>
-
     <link rel="icon" type="image/png" href="bilsas_logo_normal.png">
-
     <meta property="og:title" content="BİLSAS | Bilkent Uzay ve Havacılık Kulübü">
     <meta property="og:description" content="Mühendislik disiplini ve havacılık tutkusuyla gökyüzünün sınırlarını zorluyoruz.">
     <meta property="og:image" content="https://deja-vu1.github.io/bilsas_logo_normal.png">
@@ -77,9 +76,13 @@
         }
         #theme-toggle:hover { background: var(--primary); color: white; transform: scale(1.05); }
 
-        /* --- HERO & 3D BÖLÜMÜ --- */
+        /* --- HERO & 3D BÖLÜMÜ (DÜZELTİLDİ) --- */
         .hero {
-            height: 100vh; position: relative;
+            /* DÜZELTME: height yerine min-height, ve menünün altına girmesin diye padding eklendi */
+            min-height: 100vh; 
+            padding-top: 100px;
+            padding-bottom: 50px;
+            position: relative;
             background-image: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1920');
             background-size: cover; background-position: center; background-attachment: fixed;
             overflow: hidden; display: flex; align-items: center;
@@ -90,7 +93,7 @@
         
         .hero-layout {
             position: relative; z-index: 3; display: flex; align-items: center; justify-content: space-between;
-            width: 100%; max-width: 1400px; margin: 0 auto; padding: 0 50px; height: 100%; pointer-events: none;
+            width: 100%; max-width: 1400px; margin: 0 auto; padding: 0 50px; pointer-events: none;
         }
 
         .hero-text { width: 45%; pointer-events: auto; text-align: left; opacity: 0; animation: fadeUp 1s ease-out 0.3s forwards; }
@@ -140,10 +143,16 @@
 
         @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* --- MOBİL UYUM (DÜZELTİLDİ) --- */
         @media (max-width: 992px) {
-            .hero-layout { flex-direction: column; justify-content: center; text-align: center; margin-top: 80px; }
-            .hero-text { width: 100%; text-align: center; }
-            .hero-3d-area { width: 100%; height: 50vh; margin-top: 30px; }
+            .hero-layout { flex-direction: column; justify-content: center; text-align: center; margin-top: 0; padding: 0 20px; }
+            .hero-text { width: 100%; text-align: center; margin-top: 20px; }
+            /* Mobilde başlık ve fontlar küçültüldü */
+            .hero h1 { font-size: 2.8rem; margin-bottom: 15px; }
+            .hero p { font-size: 1.1rem; margin-bottom: 25px; }
+            /* Drone alanı mobilde esnek hale getirildi */
+            .hero-3d-area { width: 100%; height: 45vh; margin-top: 20px; }
+            
             header { padding: 10px 20px; }
             nav ul { display: none; }
             .about-grid { grid-template-columns: 1fr; }
@@ -255,7 +264,7 @@
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 
     <script>
-        // --- 1. TEMA VE LOGO SİSTEMİ ---
+        // --- TEMA VE LOGO SİSTEMİ ---
         const themeToggle = document.getElementById('theme-toggle');
         const themeIcon = document.getElementById('theme-icon');
         const headerLogo = document.getElementById('header-logo');
@@ -285,7 +294,7 @@
             localStorage.setItem('theme', theme); updateLogos(theme);
         });
 
-        // --- 2. KAYDIRMA ANİMASYONLARI ---
+        // --- KAYDIRMA ANİMASYONLARI ---
         const sections = document.querySelectorAll('section');
         const observer = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
@@ -294,13 +303,13 @@
         }, { threshold: 0.15, rootMargin: "0px 0px -50px 0px" });
         sections.forEach(section => observer.observe(section));
 
-        // --- 3. PARÇACIKLAR ---
+        // --- PARÇACIKLAR ---
         particlesJS("particles-js", {
             "particles": { "number": { "value": 60 }, "color": { "value": "#ffffff" }, "size": { "value": 2 }, "line_linked": { "enable": true, "distance": 150, "color": "#4361ee", "opacity": 0.3 } },
             "interactivity": { "detect_on": "window", "events": { "onhover": { "enable": true, "mode": "repulse" }, "onclick": { "enable": true, "mode": "push" } }, "modes": { "repulse": { "distance": 120, "duration": 0.4 } } }
         });
 
-        // --- 4. OTOMATİK ÖLÇEKLENDİRMELİ 3D DRONE YÜKLEYİCİ ---
+        // --- 3D DRONE ---
         const container = document.getElementById('drone-container');
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
@@ -326,7 +335,6 @@
         loader.load('drone.glb', function (gltf) {
             loadedDrone = gltf.scene;
             
-            // Boyut ve Ölçek Analizi
             const box = new THREE.Box3().setFromObject(loadedDrone);
             const size = box.getSize(new THREE.Vector3());
             const maxDim = Math.max(size.x, size.y, size.z);
@@ -335,7 +343,6 @@
             
             loadedDrone.scale.set(scaleRatio, scaleRatio, scaleRatio);
             
-            // Merkezleme
             const scaledBox = new THREE.Box3().setFromObject(loadedDrone);
             const center = scaledBox.getCenter(new THREE.Vector3());
             loadedDrone.position.x += (loadedDrone.position.x - center.x);
