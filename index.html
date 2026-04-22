@@ -216,6 +216,23 @@
         .team-card span { color: var(--text-muted); font-size: 0.9rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
 
         .exec-grid { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+
+        /* --- FİLO VE TEKNİK PANEL CSS --- */
+        .fleet-container { background: var(--bg-card); border-radius: 25px; border: 1px solid var(--border); padding: 40px; margin-top: 30px; backdrop-filter: blur(10px); }
+        .fleet-tabs { display: flex; justify-content: center; gap: 15px; margin-bottom: 40px; flex-wrap: wrap; }
+        .tab-btn { padding: 12px 25px; border: 1px solid var(--border); background: rgba(255,255,255,0.05); color: var(--text-main); border-radius: 50px; cursor: pointer; font-weight: 600; transition: all 0.3s ease; }
+        .tab-btn.active { background: var(--primary); border-color: var(--primary); box-shadow: 0 4px 15px rgba(67, 97, 238, 0.4); }
+        
+        .spec-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
+        .spec-item { margin-bottom: 20px; }
+        .spec-label { display: flex; justify-content: space-between; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem; }
+        .bar-bg { background: rgba(255,255,255,0.1); height: 8px; border-radius: 4px; overflow: hidden; }
+        .bar-fill { background: var(--primary); height: 100%; width: 0; transition: width 1s cubic-bezier(0.17, 0.67, 0.83, 0.67); }
+        
+        .spec-info-box { text-align: left; }
+        .spec-info-box h3 { font-size: 2rem; color: var(--primary); margin-bottom: 15px; font-family: 'Poppins', sans-serif; }
+        
+        @media (max-width: 768px) { .spec-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
@@ -228,7 +245,9 @@
             <ul>
                 <li><a href="#hakkimizda">Hakkımızda</a></li>
                 <li><a href="#faaliyetler">Faaliyetler</a></li>
-                <li><a href="#yonetim">Yönetim</a></li> <li><a href="#iletisim">İletişim</a></li>
+                <li><a href="#filo">Filomuz</a></li>
+                <li><a href="#yonetim">Yönetim</a></li>
+                <li><a href="#iletisim">İletişim</a></li>
             </ul>
             <button id="theme-toggle" title="Temayı Değiştir">
                 <i class="fas fa-moon" id="theme-icon"></i>
@@ -295,6 +314,42 @@
                 <div class="activity-content">
                     <h3>Workshoplar</h3>
                     <p>Atölyemizde birebir mühendislik deneyimi sunan İHA montaj ve tasarım workshopları gerçekleştiriyoruz.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="filo">
+        <h2 class="section-title">Teknik Kabiliyetler & Filomuz</h2>
+        <div class="fleet-container">
+            <div class="fleet-tabs">
+                <button class="tab-btn active" onclick="updateFleet('fpv')">Yarış FPV</button>
+                <button class="tab-btn" onclick="updateFleet('iha')">Teknofest İHA</button>
+                <button class="tab-btn" onclick="updateFleet('uydu')">Model Uydu</button>
+            </div>
+            
+            <div class="spec-grid">
+                <div class="spec-info-box">
+                    <h3 id="drone-name">Yarış FPV</h3>
+                    <p id="drone-desc" style="color: var(--text-muted);">Yüksek manevra kabiliyeti ve hız için optimize edilmiş karbon fiber gövdeli yarış dronu.</p>
+                </div>
+                <div class="spec-bars">
+                    <div class="spec-item">
+                        <div class="spec-label"><span>Hız</span><span id="val-speed">95%</span></div>
+                        <div class="bar-bg"><div class="bar-fill" id="bar-speed" style="width: 95%;"></div></div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="spec-label"><span>Manevra</span><span id="val-agility">90%</span></div>
+                        <div class="bar-bg"><div class="bar-fill" id="bar-agility" style="width: 90%;"></div></div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="spec-label"><span>Menzil</span><span id="val-range">40%</span></div>
+                        <div class="bar-bg"><div class="bar-fill" id="bar-range" style="width: 40%;"></div></div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="spec-label"><span>Uçuş Süresi</span><span id="val-time">25%</span></div>
+                        <div class="bar-bg"><div class="bar-fill" id="bar-time" style="width: 25%;"></div></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -546,6 +601,29 @@
                 rocket.style.transform = 'translateY(0)';
                 terminal.innerHTML = "";
             }, 4000);
+        }
+
+        const fleetData = {
+            fpv: { name: "Yarış FPV", desc: "Yüksek manevra kabiliyeti ve hız için optimize edilmiş karbon fiber gövdeli yarış dronu.", stats: [95, 90, 40, 25] },
+            iha: { name: "Teknofest İHA", desc: "Otonom uçuş ve yük bırakma görevleri için tasarlanmış yüksek taşıma kapasiteli platform.", stats: [65, 50, 85, 80] },
+            uydu: { name: "Model Uydu", desc: "Telemetri verisi toplama ve atmosferik analiz görevleri için geliştirilen uydu modeli.", stats: [15, 10, 95, 90] }
+        };
+
+        function updateFleet(type) {
+            const data = fleetData[type];
+            document.getElementById('drone-name').innerText = data.name;
+            document.getElementById('drone-desc').innerText = data.desc;
+            
+            const ids = ['speed', 'agility', 'range', 'time'];
+            data.stats.forEach((stat, i) => {
+                document.getElementById(`bar-${ids[i]}`).style.width = stat + '%';
+                document.getElementById(`val-${ids[i]}`).innerText = stat + '%';
+            });
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if(btn.innerText.toLowerCase().includes(data.name.split(' ')[1].toLowerCase())) btn.classList.add('active');
+            });
         }
     </script>
 </body>
