@@ -174,6 +174,48 @@
             nav ul { display: none; }
             .about-grid { grid-template-columns: 1fr; }
         }
+
+        /* --- EASTER EGG CSS --- */
+        #egg-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; z-index: 9999; display: none;
+            flex-direction: column; justify-content: center; align-items: center;
+            font-family: monospace; color: #00ff00;
+        }
+        #terminal-content { font-size: 1.5rem; text-align: left; max-width: 80%; }
+        #terminal-content p { margin: 5px 0; }
+        #egg-rocket {
+            position: absolute; bottom: -150px; font-size: 8rem;
+            transition: transform 3s cubic-bezier(.42,0,.58,1);
+        }
+        
+        /* --- YÖNETİM KURULU CSS --- */
+        .team-section { margin-bottom: 50px; }
+        .team-subtitle { color: var(--primary); font-size: 1.8rem; margin-bottom: 30px; text-align: center; font-family: 'Poppins', sans-serif; }
+        
+        .team-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+            gap: 20px; 
+            margin-bottom: 60px;
+        }
+
+        .team-card {
+            background: var(--bg-card);
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            text-align: center;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease;
+        }
+        .team-card:hover { transform: translateY(-5px); border-color: var(--primary); }
+        
+        .team-card i { font-size: 2.5rem; color: var(--primary); margin-bottom: 15px; opacity: 0.8; }
+        .team-card h4 { font-size: 1.25rem; margin-bottom: 5px; font-family: 'Poppins', sans-serif; }
+        .team-card span { color: var(--text-muted); font-size: 0.9rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+
+        .exec-grid { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
     </style>
 </head>
 <body>
@@ -181,13 +223,12 @@
     <header>
         <div class="logo-container">
             <img src="bilsas_logo_darkmode.png" id="header-logo" alt="BİLSAS Logo">
-            <div class="logo-text">BİLSAS</div>
         </div>
         <nav>
             <ul>
                 <li><a href="#hakkimizda">Hakkımızda</a></li>
-                <li><a href="#faaliyetler">Faaliyetlerimiz</a></li>
-                <li><a href="#iletisim">İletişim</a></li>
+                <li><a href="#faaliyetler">Faaliyetler</a></li>
+                <li><a href="#yonetim">Yönetim</a></li> <li><a href="#iletisim">İletişim</a></li>
             </ul>
             <button id="theme-toggle" title="Temayı Değiştir">
                 <i class="fas fa-moon" id="theme-icon"></i>
@@ -259,6 +300,52 @@
         </div>
     </section>
 
+    <section id="yonetim">
+        <h2 class="section-title">Yönetim Kurulu</h2>
+        
+        <div class="team-section">
+            <div class="team-grid exec-grid">
+                <div class="team-card">
+                    <i class="fas fa-user-tie"></i>
+                    <h4>Burkay Tunçtürk</h4>
+                    <span>Başkan</span>
+                </div>
+                <div class="team-card">
+                    <i class="fas fa-user-shield"></i>
+                    <h4>Berkin İlkan Seçkin</h4>
+                    <span>Genel Sekreter</span>
+                </div>
+                <div class="team-card">
+                    <i class="fas fa-coins"></i>
+                    <h4>Sıla Bozkurt</h4>
+                    <span>Sayman</span>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="team-subtitle">Kurul Üyeleri</h3>
+        <div class="team-grid">
+            <div class="team-card"><h4>Ada Aksöz</h4><span>Yönetim Kurulu Üyesi</span></div>
+            <div class="team-card"><h4>Kaan Parer</h4><span>Yönetim Kurulu Üyesi</span></div>
+            <div class="team-card"><h4>Dağhan Yılmaz</h4><span>Yönetim Kurulu Üyesi</span></div>
+            <div class="team-card"><h4>Atalay Üstündağ</h4><span>Yönetim Kurulu Üyesi</span></div>
+            <div class="team-card"><h4>Nehir Çalış</h4><span>Yönetim Kurulu Üyesi</span></div>
+            <div class="team-card"><h4>Irmak Çalış</h4><span>Yönetim Kurulu Üyesi</span></div>
+            <div class="team-card"><h4>Bilgehan Rahmi Sağır</h4><span>Yönetim Kurulu Üyesi</span></div>
+        </div>
+
+        <h3 class="team-subtitle">Denetim Kurulu</h3>
+        <div class="team-grid exec-grid">
+            <div class="team-card">
+                <i class="fas fa-clipboard-check"></i>
+                <h4>Eren Polat</h4>
+                <span>Denetim Kurul Başkanı</span>
+            </div>
+            <div class="team-card"><h4>Kaan Ermertcan</h4><span>Denetim Kurul Üyesi</span></div>
+            <div class="team-card"><h4>Mehmet Efe Çaycı</h4><span>Denetim Kurul Üyesi</span></div>
+        </div>
+    </section>
+
     <section id="iletisim">
         <div class="contact-card">
             <h2 class="section-title" style="margin-bottom: 20px;">Bizimle Tanışın</h2>
@@ -281,10 +368,15 @@
         <img src="bilsas_logo_darkmode.png" id="footer-logo" alt="BİLSAS Logo" class="footer-logo">
         <p>&copy; 2026 BİLSAS | Bilkent Uzay ve Havacılık Kulübü</p>
         
-        <div class="visitor-counter">
-            <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fdeja-vu1.github.io&count_bg=%234361EE&title_bg=%230A0A12&icon=&icon_color=%23E7E7E7&title=Z%C4%B0YARET%C3%87%C4%B0&edge_flat=true" alt="Ziyaretçi Sayacı">
-        </div>
     </footer>
+    
+    
+    
+    
+    <div id="egg-overlay">
+        <div id="terminal-content"></div>
+        <div id="egg-rocket">🚀</div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -404,6 +496,57 @@
             camera.updateProjectionMatrix();
             renderer.setSize(container.clientWidth, container.clientHeight);
         });
+
+        // --- EASTER EGG JS ---
+        let keySequence = "";
+        const secretCode = "bilsas";
+        const overlay = document.getElementById('egg-overlay');
+        const terminal = document.getElementById('terminal-content');
+        const rocket = document.getElementById('egg-rocket');
+
+        window.addEventListener('keydown', (e) => {
+            keySequence += e.key.toLowerCase();
+            if (keySequence.includes(secretCode)) {
+                keySequence = "";
+                triggerEasterEgg();
+            }
+            // Hafızayı çok doldurmamak için 10 harften sonra sıfırla
+            if (keySequence.length > 10) keySequence = ""; 
+        });
+
+        async function triggerEasterEgg() {
+            overlay.style.display = 'flex';
+            terminal.innerHTML = "";
+            rocket.style.transform = 'translateY(0)';
+            
+            const lines = [
+                "> BİLSAS SİSTEM BAŞLATILIYOR...",
+                "> İRTİFA SENSÖRLERİ AKTİF EDİLİYOR...",
+                "> JİROSKOP KALİBRASYONU TAMAMLANDI...",
+                "> MOTORLAR ATEŞLENİYOR...",
+                "> 3... 2... 1... KALKIŞ!"
+            ];
+
+            for (let line of lines) {
+                const p = document.createElement('p');
+                terminal.appendChild(p);
+                for (let char of line) {
+                    p.innerHTML += char;
+                    await new Promise(r => setTimeout(r, 40)); // Yazı yazma hızı
+                }
+                await new Promise(r => setTimeout(r, 400)); // Satır arası bekleme
+            }
+
+            // Roketi ekranın dışına kadar fırlat
+            rocket.style.transform = `translateY(-${window.innerHeight + 500}px)`;
+            
+            // 4 Saniye sonra sistemi eski haline getirip gizle
+            setTimeout(() => {
+                overlay.style.display = 'none';
+                rocket.style.transform = 'translateY(0)';
+                terminal.innerHTML = "";
+            }, 4000);
+        }
     </script>
 </body>
 </html>
