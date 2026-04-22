@@ -244,6 +244,44 @@
         .spec-info-box h3 { font-size: 2rem; color: var(--primary); margin-bottom: 15px; font-family: 'Poppins', sans-serif; }
         
         @media (max-width: 768px) { .spec-grid { grid-template-columns: 1fr; } }
+
+        /* --- QR MODAL CSS --- */
+        #qr-toggle {
+            background: var(--bg-card); border: 1px solid var(--border); color: var(--text-main);
+            width: 40px; height: 40px; border-radius: 10px; cursor: pointer;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 0.95rem; font-weight: bold; font-family: 'Poppins', sans-serif;
+        }
+        #qr-toggle:hover { background: var(--primary); color: white; transform: scale(1.05); }
+        #qr-modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000; display: none;
+            justify-content: center; align-items: center;
+            backdrop-filter: blur(5px);
+        }
+        .qr-content {
+            background: var(--bg-card);
+            padding: 30px;
+            border-radius: 25px;
+            border: 1px solid var(--border);
+            text-align: center;
+            max-width: 350px;
+            width: 90%;
+            position: relative;
+            animation: fadeUp 0.4s ease-out;
+        }
+        .qr-content img {
+            width: 100%;
+            height: auto;
+            border-radius: 15px;
+            margin-top: 15px;
+        }
+        .qr-close {
+            position: absolute; top: 15px; right: 20px;
+            font-size: 1.5rem; cursor: pointer; color: var(--text-muted);
+        }
+        .qr-close:hover { color: var(--secondary); }
     </style>
 </head>
 <body>
@@ -261,6 +299,7 @@
                 <li><a href="#iletisim" data-tr="İletişim" data-en="Contact">İletişim</a></li>
             </ul>
             <div class="nav-controls">
+                <button id="qr-toggle" class="nav-btn" title="QR Kodu Aç">QR</button>
                 <button id="lang-toggle" title="Change Language">EN</button>
                 <button id="theme-toggle" title="Temayı Değiştir">
                     <i class="fas fa-moon" id="theme-icon"></i>
@@ -437,7 +476,13 @@
         <img src="bilsas_logo_darkmode.png" id="footer-logo" alt="BİLSAS Logo" class="footer-logo">
         <p data-tr="&copy; 2026 BİLSAS | Bilkent Uzay ve Havacılık Kulübü" data-en="&copy; 2026 BILSAS | Bilkent Space and Aviation Club">&copy; 2026 BİLSAS | Bilkent Uzay ve Havacılık Kulübü</p>
     </footer>
-    
+    <div id="qr-modal">
+        <div class="qr-content">
+            <span class="qr-close" id="qr-close">&times;</span>
+            <h3 data-tr="BİLSAS QR Kod" data-en="BILSAS QR Code">BİLSAS QR Kod</h3>
+            <img src="qrcode.jpg" alt="BILSAS QR">
+        </div>
+    </div>
     <div id="egg-overlay">
         <div id="terminal-content"></div>
         <div id="egg-rocket">🚀</div>
@@ -680,6 +725,29 @@
                 rocket.style.transform = 'translateY(0)';
                 terminal.innerHTML = "";
             }, 4000);
+        }
+
+        // --- QR MODAL MANTIĞI ---
+        const qrToggle = document.getElementById('qr-toggle');
+        const qrModal = document.getElementById('qr-modal');
+        const qrClose = document.getElementById('qr-close');
+
+        if(qrToggle && qrModal && qrClose) {
+            qrToggle.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                qrModal.style.display = 'flex';
+            });
+
+            qrClose.addEventListener('click', () => {
+                qrModal.style.display = 'none';
+            });
+
+            window.addEventListener('click', (e) => {
+                if (e.target === qrModal) {
+                    qrModal.style.display = 'none';
+                }
+            });
         }
     </script>
 </body>
