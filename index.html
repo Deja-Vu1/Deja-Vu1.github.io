@@ -560,7 +560,7 @@
 
             fleetScene = new THREE.Scene();
             fleetCamera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
-            fleetCamera.position.set(0, 2, 8);
+            fleetCamera.position.set(0, 0.5, 7);
 
             fleetRenderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
             fleetRenderer.setSize(container.clientWidth, container.clientHeight);
@@ -576,7 +576,6 @@
             const fleetControls = new THREE.OrbitControls(fleetCamera, fleetRenderer.domElement);
             fleetControls.enableZoom = false;
             fleetControls.autoRotate = true;
-
             function animateFleet() {
                 requestAnimationFrame(animateFleet);
                 fleetControls.update();
@@ -595,11 +594,19 @@
                 
                 const box = new THREE.Box3().setFromObject(fleetLoadedModel);
                 const size = box.getSize(new THREE.Vector3());
-                const scale = 5.0 / Math.max(size.x, size.y, size.z);
+                const maxDim = Math.max(size.x, size.y, size.z);
+                
+                // targetSize değerini artırarak modeli kutuya yayıyoruz
+                const targetSize = 7.5; 
+                const scale = targetSize / maxDim;
                 fleetLoadedModel.scale.set(scale, scale, scale);
                 
-                const center = box.getCenter(new THREE.Vector3());
-                fleetLoadedModel.position.sub(center);
+                // Modeli tam pivot noktasına göre ortalamak için
+                const center = new THREE.Vector3();
+                box.getCenter(center);
+                fleetLoadedModel.position.x = -center.x * scale;
+                fleetLoadedModel.position.y = -center.y * scale;
+                fleetLoadedModel.position.z = -center.z * scale;
                 
                 fleetScene.add(fleetLoadedModel);
             });
