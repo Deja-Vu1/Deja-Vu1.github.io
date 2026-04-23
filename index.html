@@ -243,7 +243,35 @@
         .spec-info-box { text-align: left; }
         .spec-info-box h3 { font-size: 2rem; color: var(--primary); margin-bottom: 15px; font-family: 'Poppins', sans-serif; }
         
-        @media (max-width: 768px) { .spec-grid { grid-template-columns: 1fr; } }
+        /* --- TELEFONLAR İÇİN KUSURSUZ MOBİL UYUM (768px altı) --- */
+        @media (max-width: 768px) { 
+            .section-title { font-size: 2.2rem; }
+            
+            /* Filo kutusunun iç boşluklarını daraltıp ekrana sığdırıyoruz */
+            .fleet-container { padding: 25px 15px; margin-top: 20px; }
+            
+            /* Butonların yan yana sıkışmasını önleyip esnek (flex) yapıyoruz */
+            .fleet-tabs { gap: 8px; flex-wrap: wrap; justify-content: center; }
+            .tab-btn { padding: 10px 12px; font-size: 0.85rem; flex-grow: 1; text-align: center; }
+            
+            /* 3D Modelin dışarı taşmasını KESİN olarak engelliyoruz */
+            .spec-grid { grid-template-columns: 1fr; gap: 20px; }
+            #fleet-3d-canvas { 
+                height: 250px !important; 
+                max-width: 100% !important; 
+                overflow: hidden !important; 
+                margin-bottom: 10px !important; 
+            }
+            
+            /* Mobil ekranda daha iyi durması için metinleri ortalıyoruz */
+            .spec-info-box h3 { font-size: 1.6rem; text-align: center; }
+            #drone-desc { font-size: 0.9rem; text-align: center; margin-bottom: 10px; }
+            
+            /* Stat barlarının taşmasını önlüyoruz */
+            .spec-label { font-size: 0.85rem; }
+            .spec-item { margin-bottom: 15px; }
+            .bar-bg { width: 100%; }
+        }
 
         /* --- QR MODAL CSS --- */
         #qr-toggle {
