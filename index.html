@@ -552,34 +552,34 @@
             }
         };
 
-        let fleetScene, fleetCamera, fleetRenderer, fleetLoadedModel;
+
+        let fleetScene, fleetCamera, fleetRenderer, fleetGroup; // fleetLoadedModel yerine fleetGroup kullanacağız
 
         function initFleet3D() {
             const container = document.getElementById('fleet-3d-canvas');
             if(!container) return;
 
             fleetScene = new THREE.Scene();
-            // Hero bölümündeki kamera açısıyla birebir eşitledik
             fleetCamera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
-            fleetCamera.position.set(5, 3, 8); 
+            fleetCamera.position.set(5, 3, 8); // Hero ile aynı açı
 
             fleetRenderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
             fleetRenderer.setSize(container.clientWidth, container.clientHeight);
             fleetRenderer.setPixelRatio(window.devicePixelRatio);
             container.appendChild(fleetRenderer.domElement);
 
-            // Hero bölümündeki profesyonel ışıklandırmayı ekledik
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
-            fleetScene.add(ambientLight);
-            
+            // Hero bölümündeki ışıklandırma seti
+            fleetScene.add(new THREE.AmbientLight(0xffffff, 0.8));
             const dirLight = new THREE.DirectionalLight(0xffffff, 1.5);
             dirLight.position.set(10, 20, 10);
             fleetScene.add(dirLight);
-
-            // O meşhur mavi arka ışık (Mühendislik havası katan detay)
             const backLight = new THREE.DirectionalLight(0x4361ee, 2); 
             backLight.position.set(-10, 10, -10);
             fleetScene.add(backLight);
+
+            // Modelleri içine koyacağımız grup
+            fleetGroup = new THREE.Group();
+            fleetScene.add(fleetGroup);
 
             const fleetControls = new THREE.OrbitControls(fleetCamera, fleetRenderer.domElement);
             fleetControls.enableZoom = false;
@@ -589,50 +589,43 @@
 
             function animateFleet() {
                 requestAnimationFrame(animateFleet);
-                if (fleetLoadedModel) {
-                    // Hero bölümündeki hafif havada süzülme (yüzme) animasyonu
-                    fleetLoadedModel.position.y = Math.sin(Date.now() * 0.002) * 0.2; 
+                if (fleetGroup) {
+                    // Süzülme animasyonunu gruba uyguluyoruz, böylece modelin merkezi bozulmuyor
+                    fleetGroup.position.y = Math.sin(Date.now() * 0.002) * 0.2; 
                 }
                 fleetControls.update();
                 fleetRenderer.render(fleetScene, fleetCamera);
             }
             animateFleet();
-
-            // Pencere boyutu değiştiğinde 3D alanın bozulmaması için
-            window.addEventListener('resize', () => {
-                if(container.clientWidth > 0) {
-                    fleetCamera.aspect = container.clientWidth / container.clientHeight;
-                    fleetCamera.updateProjectionMatrix();
-                    fleetRenderer.setSize(container.clientWidth, container.clientHeight);
-                }
-            });
         }
 
         function changeFleetModel(modelPath) {
-            if (!fleetScene) return;
-            if (fleetLoadedModel) fleetScene.remove(fleetLoadedModel);
+            if (!fleetScene || !fleetGroup) return;
+
+            // Önceki modeli temizle
+            while(fleetGroup.children.length > 0){ 
+                fleetGroup.remove(fleetGroup.children[0]); 
+            }
 
             const loader = new THREE.GLTFLoader();
             loader.load(modelPath, (gltf) => {
-                fleetLoadedModel = gltf.scene;
+                const model = gltf.scene;
                 
-                // Hero bölümündeki ideal ölçekleme (6.0) uygulandı
-                const box = new THREE.Box3().setFromObject(fleetLoadedModel);
+                // 1. Ölçekleme (Hero standardı: 6.0)
+                const box = new THREE.Box3().setFromObject(model);
                 const size = box.getSize(new THREE.Vector3());
                 const maxDim = Math.max(size.x, size.y, size.z);
-                const targetSize = 6.0; 
-                const scaleRatio = targetSize / maxDim;
+                const scale = 6.0 / maxDim;
+                model.scale.set(scale, scale, scale);
                 
-                fleetLoadedModel.scale.set(scaleRatio, scaleRatio, scaleRatio);
+                // 2. Modeli Grubun İçinde Sıfırla (Kusursuz Merkezleme)
+                const center = new THREE.Vector3();
+                new THREE.Box3().setFromObject(model).getCenter(center);
+                model.position.x = -center.x;
+                model.position.y = -center.y;
+                model.position.z = -center.z;
                 
-                // Modeli tam matematiksel merkeze taşıma (Ortada durmasını sağlar)
-                const scaledBox = new THREE.Box3().setFromObject(fleetLoadedModel);
-                const center = scaledBox.getCenter(new THREE.Vector3());
-                fleetLoadedModel.position.x += (fleetLoadedModel.position.x - center.x);
-                fleetLoadedModel.position.y += (fleetLoadedModel.position.y - center.y);
-                fleetLoadedModel.position.z += (fleetLoadedModel.position.z - center.z);
-                
-                fleetScene.add(fleetLoadedModel);
+                fleetGroup.add(model);
             });
         }
 
