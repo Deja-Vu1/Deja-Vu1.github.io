@@ -528,29 +528,35 @@
 
     <script>
         // --- 1. FİLO VERİLERİ VE 3D SİSTEMİ ---
+        // --- GÜNCELLENMİŞ FİLO VERİLERİ VE 3D SİSTEMİ ---
         const fleetData = {
             fpv: { 
-                nameTr: "Yarış FPV", nameEn: "Racing FPV", 
-                descTr: "Yüksek manevra kabiliyeti ve hız için optimize edilmiş karbon fiber gövdeli yarış dronu.", 
-                descEn: "Carbon fiber racing drone optimized for high maneuverability and speed.",
+                nameTr: "2025 Teknofest İHA", 
+                nameEn: "2025 Teknofest UAV", 
+                descTr: "2025 finalleri için geliştirilen, stabilite ve yük bırakma hassasiyeti ile kendini kanıtlamış kıdemli platformumuz.", 
+                descEn: "Our senior platform proven with stability and payload precision, developed for the 2025 finals.",
                 modelFile: "drone.glb",
-                stats: [95, 90, 40, 25] 
+                stats: [75, 65, 70, 60] 
             },
             iha: { 
-                nameTr: "Teknofest İHA", nameEn: "Teknofest UAV", 
-                descTr: "Otonom uçuş ve yük bırakma görevleri için tasarlanmış yüksek taşıma kapasiteli platform.", 
-                descEn: "High payload platform designed for autonomous flight and cargo drop missions.",
+                nameTr: "2026 Teknofest İHA", 
+                nameEn: "2026 Teknofest UAV", 
+                descTr: "BİLSAS'ın yeni nesil amiral gemisi. Yapay zeka destekli otonom görev icrası ve optimize edilmiş aerodinamik yapısı ile 2026 şampiyonluğu için tasarlandı.", 
+                descEn: "BILSAS's next-gen flagship. Designed for the 2026 championship with AI-powered autonomous mission execution and optimized aerodynamics.",
                 modelFile: "teknofest2026iha.glb",
-                stats: [65, 50, 85, 80] 
+                stats: [90, 85, 95, 85] 
             },
             uydu: { 
-                nameTr: "Model Uydu", nameEn: "Model Satellite", 
-                descTr: "Telemetri verisi toplama ve atmosferik analiz görevleri için geliştirilen uydu modeli.", 
-                descEn: "Satellite model developed for telemetry data collection and atmospheric analysis.",
+                nameTr: "Model Uydu", 
+                nameEn: "Model Satellite", 
+                descTr: "8. TÜRKSAT Model Uydu Yarışması vizyonuyla hazırlanan, telemetri ve faydalı yük mekanizmalarını içeren CubeSat prototipi.", 
+                descEn: "CubeSat prototype featuring telemetry and payload mechanisms, prepared with the vision of the 8th TÜRKSAT Model Satellite Competition.",
                 modelFile: "cubesat.glb",
                 stats: [15, 10, 95, 90] 
             }
         };
+
+        
 
         let fleetScene, fleetCamera, fleetRenderer, fleetGroup;
 
@@ -607,10 +613,11 @@
             });
         }
 
+        // --- CUBESAT VE DİĞERLERİ İÇİN KESİN MERKEZLEME ÇÖZÜMÜ ---
         function changeFleetModel(modelPath) {
             if (!fleetScene || !fleetGroup) return;
 
-            // Önceki modeli gruptan tamamen temizle
+            // Önceki modeli temizle
             while(fleetGroup.children.length > 0){ 
                 fleetGroup.remove(fleetGroup.children[0]); 
             }
@@ -619,19 +626,22 @@
             loader.load(modelPath, (gltf) => {
                 const model = gltf.scene;
                 
-                // 1. ÖNCE modeli doğru oranda ölçeklendir
+                // 1. Önce modeli kutuya sığacak şekilde ölçeklendir (Hero ile aynı oran)
                 const box = new THREE.Box3().setFromObject(model);
                 const size = box.getSize(new THREE.Vector3());
                 const maxDim = Math.max(size.x, size.y, size.z);
-                const scale = 5.5 / maxDim; // Kutuya taşmadan sığması için ideal ölçek
+                const targetSize = 6.0; 
+                const scale = targetSize / maxDim;
                 model.scale.set(scale, scale, scale);
                 
-                // 2. Ölçeklendirmeden SONRA matrisleri güncelle ve YENİ merkezi bul
+                // 2. Ölçeklendirmeden sonra dünyadaki koordinatlarını güncelle
                 model.updateMatrixWorld(); 
+                
+                // 3. YENİ Boyutuna göre merkezini bul ve grubu tam ortala
+                // Bu adım cubesat'ın aşağıya kaymasını kesin olarak engeller
                 const scaledBox = new THREE.Box3().setFromObject(model);
                 const center = scaledBox.getCenter(new THREE.Vector3());
                 
-                // 3. Modeli tam (0,0,0) noktasına (ekranın tam ortasına) sabitle
                 model.position.x = -center.x;
                 model.position.y = -center.y;
                 model.position.z = -center.z;
