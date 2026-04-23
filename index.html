@@ -282,6 +282,37 @@
             font-size: 1.5rem; cursor: pointer; color: var(--text-muted);
         }
         .qr-close:hover { color: var(--secondary); }
+
+        /* --- YENİ: SABİT INSTAGRAM BUTONU --- */
+        .floating-ig {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            color: white !important;
+            padding: 12px 25px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(220, 39, 67, 0.4);
+            z-index: 1000;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .floating-ig:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(220, 39, 67, 0.6);
+        }
+        .floating-ig i { font-size: 1.5rem; }
+
+        /* Telefondan girildiğinde buton çok yer kaplamasın diye sadece ikon kalır */
+        @media (max-width: 768px) {
+            .floating-ig { bottom: 20px; right: 20px; padding: 12px; }
+            .floating-ig span { display: none; }
+        }
     </style>
 </head>
 <body>
@@ -383,6 +414,8 @@
             
             <div class="spec-grid">
                 <div class="spec-info-box">
+                    <div id="fleet-3d-canvas" style="width: 100%; height: 350px; cursor: grab; margin-bottom: 20px;"></div>
+                    
                     <h3 id="drone-name">Yarış FPV</h3>
                     <p id="drone-desc" style="color: var(--text-muted);">Yüksek manevra kabiliyeti ve hız için optimize edilmiş karbon fiber gövdeli yarış dronu.</p>
                 </div>
@@ -494,27 +527,83 @@
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 
     <script>
-        // --- 1. FİLO VERİLERİ (Hata vermemesi için en üste alındı) ---
+        // --- 1. FİLO VERİLERİ VE 3D SİSTEMİ ---
         const fleetData = {
             fpv: { 
                 nameTr: "Yarış FPV", nameEn: "Racing FPV", 
                 descTr: "Yüksek manevra kabiliyeti ve hız için optimize edilmiş karbon fiber gövdeli yarış dronu.", 
                 descEn: "Carbon fiber racing drone optimized for high maneuverability and speed.",
+                modelFile: "drone.glb",
                 stats: [95, 90, 40, 25] 
             },
             iha: { 
                 nameTr: "Teknofest İHA", nameEn: "Teknofest UAV", 
                 descTr: "Otonom uçuş ve yük bırakma görevleri için tasarlanmış yüksek taşıma kapasiteli platform.", 
                 descEn: "High payload platform designed for autonomous flight and cargo drop missions.",
+                modelFile: "teknofest2026iha.glb",
                 stats: [65, 50, 85, 80] 
             },
             uydu: { 
                 nameTr: "Model Uydu", nameEn: "Model Satellite", 
                 descTr: "Telemetri verisi toplama ve atmosferik analiz görevleri için geliştirilen uydu modeli.", 
                 descEn: "Satellite model developed for telemetry data collection and atmospheric analysis.",
+                modelFile: "cubesat.glb",
                 stats: [15, 10, 95, 90] 
             }
         };
+
+        let fleetScene, fleetCamera, fleetRenderer, fleetLoadedModel;
+
+        function initFleet3D() {
+            const container = document.getElementById('fleet-3d-canvas');
+            if(!container) return;
+
+            fleetScene = new THREE.Scene();
+            fleetCamera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
+            fleetCamera.position.set(0, 2, 8);
+
+            fleetRenderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            fleetRenderer.setSize(container.clientWidth, container.clientHeight);
+            container.appendChild(fleetRenderer.domElement);
+
+            const light = new THREE.AmbientLight(0xffffff, 1);
+            fleetScene.add(light);
+            
+            const dirLight = new THREE.DirectionalLight(0xffffff, 1.5);
+            dirLight.position.set(5, 5, 5);
+            fleetScene.add(dirLight);
+
+            const fleetControls = new THREE.OrbitControls(fleetCamera, fleetRenderer.domElement);
+            fleetControls.enableZoom = false;
+            fleetControls.autoRotate = true;
+
+            function animateFleet() {
+                requestAnimationFrame(animateFleet);
+                fleetControls.update();
+                fleetRenderer.render(fleetScene, fleetCamera);
+            }
+            animateFleet();
+        }
+
+        function changeFleetModel(modelPath) {
+            if (!fleetScene) return;
+            if (fleetLoadedModel) fleetScene.remove(fleetLoadedModel);
+
+            const loader = new THREE.GLTFLoader();
+            loader.load(modelPath, (gltf) => {
+                fleetLoadedModel = gltf.scene;
+                
+                const box = new THREE.Box3().setFromObject(fleetLoadedModel);
+                const size = box.getSize(new THREE.Vector3());
+                const scale = 5.0 / Math.max(size.x, size.y, size.z);
+                fleetLoadedModel.scale.set(scale, scale, scale);
+                
+                const center = box.getCenter(new THREE.Vector3());
+                fleetLoadedModel.position.sub(center);
+                
+                fleetScene.add(fleetLoadedModel);
+            });
+        }
 
         function updateFleet(type) {
             const data = fleetData[type];
@@ -526,6 +615,8 @@
                 document.getElementById(`bar-${ids[i]}`).style.width = stat + '%';
                 document.getElementById(`val-${ids[i]}`).innerText = stat + '%';
             });
+
+            changeFleetModel(data.modelFile);
 
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 btn.classList.remove('active');
@@ -588,6 +679,7 @@
 
         // SAYFA AÇILIŞ AYARLARINI UYGULA
         applyLanguage(currentLang);
+        initFleet3D(); // Filo panelindeki 3D motorunu başlat
         updateFleet('fpv');
 
         // --- 4. KAYDIRMA ANİMASYONLARI ---
@@ -750,5 +842,9 @@
             });
         }
     </script>
+    <a href="https://instagram.com/bilkentsas" target="_blank" class="floating-ig">
+        <i class="fab fa-instagram"></i>
+        <span data-tr="Bizi takip et!" data-en="Follow us!">Bizi takip et!</span>
+    </a>
 </body>
 </html>
