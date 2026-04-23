@@ -107,7 +107,25 @@
         .hero h1 { font-family: 'Poppins', sans-serif; font-size: 4.2rem; line-height: 1.1; margin-bottom: 20px; }
         .hero h1 span { color: var(--primary); }
         .hero p { font-size: 1.25rem; color: var(--text-muted); margin-bottom: 35px; }
-
+        /* Finalist Rozeti Tasarımı */
+        .hero-badge {
+            display: inline-block;
+            background: #ff7b00; /* Canlı Turuncu */
+            color: #ffffff;
+            padding: 6px 18px;
+            border-radius: 12px; /* Yuvarlatılmış köşe */
+            font-size: 0.8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-top: 10px;
+            font-family: 'Poppins', sans-serif;
+            box-shadow: 0 4px 15px rgba(255, 123, 0, 0.4);
+            pointer-events: auto;
+            opacity: 0;
+            /* Model isminden biraz sonra (1.2s) belirmesi için */
+            animation: fadeUp 1s ease-out 1.2s forwards;
+        }
         /* 3D DRONE VE YAZISI İÇİN KAPSAYICI */
         .hero-3d-wrapper {
             width: 55%; display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -378,8 +396,11 @@
             </div>
             
             <div class="hero-3d-wrapper">
+                <div class="hero-3d-wrapper">
                 <div class="hero-3d-area" id="drone-container"></div>
                 <p class="model-caption" data-tr="2025 Teknofest İHA" data-en="2025 Teknofest UAV">2025 Teknofest İHA</p>
+                <div class="hero-badge" data-tr="Finalist" data-en="Finalist">Finalist</div>
+            </div>
             </div>
         </div>
     </div>
