@@ -552,8 +552,7 @@
             }
         };
 
-
-        let fleetScene, fleetCamera, fleetRenderer, fleetGroup; // fleetLoadedModel yerine fleetGroup kullanacağız
+        let fleetScene, fleetCamera, fleetRenderer, fleetGroup;
 
         function initFleet3D() {
             const container = document.getElementById('fleet-3d-canvas');
@@ -561,14 +560,14 @@
 
             fleetScene = new THREE.Scene();
             fleetCamera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
-            fleetCamera.position.set(5, 3, 8); // Hero ile aynı açı
+            fleetCamera.position.set(5, 3, 8); // Hero bölümündeki profesyonel açıyla aynı
 
             fleetRenderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
             fleetRenderer.setSize(container.clientWidth, container.clientHeight);
             fleetRenderer.setPixelRatio(window.devicePixelRatio);
             container.appendChild(fleetRenderer.domElement);
 
-            // Hero bölümündeki ışıklandırma seti
+            // Profesyonel Işıklandırma (Mavi yansımalar dahil)
             fleetScene.add(new THREE.AmbientLight(0xffffff, 0.8));
             const dirLight = new THREE.DirectionalLight(0xffffff, 1.5);
             dirLight.position.set(10, 20, 10);
@@ -577,7 +576,7 @@
             backLight.position.set(-10, 10, -10);
             fleetScene.add(backLight);
 
-            // Modelleri içine koyacağımız grup
+            // Tüm modelleri içine alacak bir Grup oluşturuyoruz (Merkezleme kaymasını önler)
             fleetGroup = new THREE.Group();
             fleetScene.add(fleetGroup);
 
@@ -590,19 +589,28 @@
             function animateFleet() {
                 requestAnimationFrame(animateFleet);
                 if (fleetGroup) {
-                    // Süzülme animasyonunu gruba uyguluyoruz, böylece modelin merkezi bozulmuyor
+                    // Animasyonu modele değil, modele ev sahipliği yapan gruba uyguluyoruz
                     fleetGroup.position.y = Math.sin(Date.now() * 0.002) * 0.2; 
                 }
                 fleetControls.update();
                 fleetRenderer.render(fleetScene, fleetCamera);
             }
             animateFleet();
+
+            // Ekran boyutu değiştiğinde bozulmayı önler
+            window.addEventListener('resize', () => {
+                if(container.clientWidth > 0) {
+                    fleetCamera.aspect = container.clientWidth / container.clientHeight;
+                    fleetCamera.updateProjectionMatrix();
+                    fleetRenderer.setSize(container.clientWidth, container.clientHeight);
+                }
+            });
         }
 
         function changeFleetModel(modelPath) {
             if (!fleetScene || !fleetGroup) return;
 
-            // Önceki modeli temizle
+            // Önceki modeli gruptan tamamen temizle
             while(fleetGroup.children.length > 0){ 
                 fleetGroup.remove(fleetGroup.children[0]); 
             }
@@ -611,16 +619,19 @@
             loader.load(modelPath, (gltf) => {
                 const model = gltf.scene;
                 
-                // 1. Ölçekleme (Hero standardı: 6.0)
+                // 1. ÖNCE modeli doğru oranda ölçeklendir
                 const box = new THREE.Box3().setFromObject(model);
                 const size = box.getSize(new THREE.Vector3());
                 const maxDim = Math.max(size.x, size.y, size.z);
-                const scale = 6.0 / maxDim;
+                const scale = 5.5 / maxDim; // Kutuya taşmadan sığması için ideal ölçek
                 model.scale.set(scale, scale, scale);
                 
-                // 2. Modeli Grubun İçinde Sıfırla (Kusursuz Merkezleme)
-                const center = new THREE.Vector3();
-                new THREE.Box3().setFromObject(model).getCenter(center);
+                // 2. Ölçeklendirmeden SONRA matrisleri güncelle ve YENİ merkezi bul
+                model.updateMatrixWorld(); 
+                const scaledBox = new THREE.Box3().setFromObject(model);
+                const center = scaledBox.getCenter(new THREE.Vector3());
+                
+                // 3. Modeli tam (0,0,0) noktasına (ekranın tam ortasına) sabitle
                 model.position.x = -center.x;
                 model.position.y = -center.y;
                 model.position.z = -center.z;
@@ -640,6 +651,7 @@
                 document.getElementById(`val-${ids[i]}`).innerText = stat + '%';
             });
 
+            // 3D Modeli değiştir
             changeFleetModel(data.modelFile);
 
             document.querySelectorAll('.tab-btn').forEach(btn => {
