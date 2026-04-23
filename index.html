@@ -407,8 +407,8 @@
         <h2 class="section-title" data-tr="Teknik Kabiliyetler & Filomuz" data-en="Technical Capabilities & Fleet">Teknik Kabiliyetler & Filomuz</h2>
         <div class="fleet-container">
             <div class="fleet-tabs">
-                <button class="tab-btn active" onclick="updateFleet('fpv')" data-tr="Yarış FPV" data-en="Racing FPV">Yarış FPV</button>
-                <button class="tab-btn" onclick="updateFleet('iha')" data-tr="Teknofest İHA" data-en="Teknofest UAV">Teknofest İHA</button>
+                <button class="tab-btn active" onclick="updateFleet('fpv')" data-tr="2025 Teknofest İHA" data-en="2025 Teknofest UAV">2025 Teknofest İHA</button>
+                <button class="tab-btn" onclick="updateFleet('iha')" data-tr="2026 Teknofest İHA" data-en="2026 Teknofest UAV">2026 Teknofest İHA</button>
                 <button class="tab-btn" onclick="updateFleet('uydu')" data-tr="Model Uydu" data-en="Model Satellite">Model Uydu</button>
             </div>
             
@@ -533,29 +533,28 @@
             fpv: { 
                 nameTr: "2025 Teknofest İHA", 
                 nameEn: "2025 Teknofest UAV", 
-                descTr: "2025 finalleri için geliştirilen, stabilite ve yük bırakma hassasiyeti ile kendini kanıtlamış kıdemli platformumuz.", 
-                descEn: "Our senior platform proven with stability and payload precision, developed for the 2025 finals.",
+                descTr: "Stabilite ve yük bırakma hassasiyeti ile kendini kanıtlamış, operasyonel kabiliyeti yüksek kıdemli platformumuz.", 
+                descEn: "Our senior platform with proven stability and payload precision, featuring high operational capability.",
                 modelFile: "drone.glb",
                 stats: [75, 65, 70, 60] 
             },
             iha: { 
                 nameTr: "2026 Teknofest İHA", 
                 nameEn: "2026 Teknofest UAV", 
-                descTr: "BİLSAS'ın yeni nesil amiral gemisi. Yapay zeka destekli otonom görev icrası ve optimize edilmiş aerodinamik yapısı ile 2026 şampiyonluğu için tasarlandı.", 
-                descEn: "BILSAS's next-gen flagship. Designed for the 2026 championship with AI-powered autonomous mission execution and optimized aerodynamics.",
+                descTr: "BİLSAS'ın yeni nesil amiral gemisi. Yapay zeka destekli otonom görev icrası ve optimize edilmiş aerodinamik yapısı ile gelecek vizyonumuzun temsilcisi.", 
+                descEn: "BILSAS's next-gen flagship. Representative of our future vision with AI-powered autonomous mission execution and optimized aerodynamics.",
                 modelFile: "teknofest2026iha.glb",
                 stats: [90, 85, 95, 85] 
             },
             uydu: { 
                 nameTr: "Model Uydu", 
                 nameEn: "Model Satellite", 
-                descTr: "8. TÜRKSAT Model Uydu Yarışması vizyonuyla hazırlanan, telemetri ve faydalı yük mekanizmalarını içeren CubeSat prototipi.", 
-                descEn: "CubeSat prototype featuring telemetry and payload mechanisms, prepared with the vision of the 8th TÜRKSAT Model Satellite Competition.",
+                descTr: "Mühendislik disipliniyle geliştirilen; telemetri veri iletimi, atmosferik analiz ve faydalı yük mekanizmalarını bünyesinde barındıran CubeSat prototipi.", 
+                descEn: "CubeSat prototype developed with engineering discipline, incorporating telemetry data transmission, atmospheric analysis, and payload mechanisms.",
                 modelFile: "cubesat.glb",
                 stats: [15, 10, 95, 90] 
             }
         };
-
         
 
         let fleetScene, fleetCamera, fleetRenderer, fleetGroup;
