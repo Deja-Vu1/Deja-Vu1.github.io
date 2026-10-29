@@ -135,3 +135,25 @@ dialog button{padding:8px 20px;border-radius:6px;border:2px solid var(--ink);bac
 
 .manifest li.pres b{font-weight:800;color:var(--blue)}
 .manifest li.pres span{font-weight:800;color:var(--blue)}
+/* easter egg */
+#site-header{display:contents}
+#egg{position:fixed;inset:0;z-index:9999;pointer-events:none;background:rgba(5,10,25,0);transition:background .6s;overflow:hidden}
+#egg.on{background:rgba(5,10,25,.6)}
+#egg .cnt{position:absolute;inset:0;display:grid;place-items:center;font:800 min(32vw,260px)/1 Sora,sans-serif;color:#FFC21A;opacity:0;will-change:transform,opacity}
+#egg .cnt.pop{animation:egg-pop .9s ease-out forwards}
+@keyframes egg-pop{0%{transform:scale(.4);opacity:0}25%{opacity:1}100%{transform:scale(1.25);opacity:0}}
+#egg .msg{position:absolute;left:0;right:0;top:40%;text-align:center;color:#E8EEFA;font:800 clamp(1.6rem,5vw,3rem)/1.2 Sora,sans-serif;opacity:0;transition:opacity .6s;padding:0 24px}
+#egg .msg.on{opacity:1}
+#egg .msg small{display:block;margin-top:10px;font:400 1.1rem 'IBM Plex Sans',sans-serif;color:#9AA9C6}
+#egg .rk{will-change:transform;position:absolute;left:50%;bottom:8px;transform:translateX(-50%);font-size:72px;line-height:1;text-align:center}
+#egg .rk .r{display:block;transform:rotate(-45deg)}
+#egg .rk .fl{width:18px;height:80px;margin:-4px auto 0;background:linear-gradient(#FFC21A,#FF6A00 60%,transparent);border-radius:0 0 50% 50%;opacity:0;transform-origin:top}
+#egg .rk.go{animation:egg-lift 1.9s cubic-bezier(.5,0,1,.6) forwards}
+#egg .rk.go .fl{opacity:1;animation:egg-fl .08s infinite alternate}
+@keyframes egg-lift{to{transform:translate(-50%,-135vh)}}
+@keyframes egg-fl{to{transform:scaleY(1.35)}}
+.egg-shake{--a:3px;animation:egg-shk .12s linear infinite}
+.egg-shake.hard{--a:9px}
+@keyframes egg-shk{20%{transform:translate(calc(var(--a)*-1),calc(var(--a)*.6))}40%{transform:translate(var(--a),calc(var(--a)*-.8))}60%{transform:translate(calc(var(--a)*-.7),calc(var(--a)*-.5))}80%{transform:translate(calc(var(--a)*.8),calc(var(--a)*.7))}}
+.eg-c{display:inline-block;will-change:transform}
+.eg-w{white-space:nowrap}
