@@ -1,0 +1,31 @@
+<!DOCTYPE html><html lang="tr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="BİLSAS galerisi: yarışmalar, workshoplar ve uçuş testlerinden kareler.">
+<meta property="og:type" content="website"><meta property="og:site_name" content="BİLSAS"><meta property="og:locale" content="tr_TR">
+<meta property="og:title" content="Galeri | BİLSAS"><meta property="og:description" content="BİLSAS galerisi: yarışmalar, workshoplar ve uçuş testlerinden kareler.">
+<meta property="og:url" content="https://deja-vu1.github.io/galeri.html"><meta property="og:image" content="https://deja-vu1.github.io/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image"><meta name="theme-color" content="#0A1428">
+<title data-tr="Galeri | BİLSAS" data-en="Gallery | BİLSAS">Galeri | BİLSAS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600&family=Sora:wght@600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css"></head><body>
+<div id="site-header"></div>
+<main>
+<div class="page-head"><div class="wrap"><h1 data-tr="Galeri" data-en="Gallery">Galeri</h1><p data-tr="Yarışmalardan, atölyeden ve sahadan kareler." data-en="Moments from competitions, the workshop and the field.">Yarışmalardan, atölyeden ve sahadan kareler.</p></div></div>
+<section><div class="wrap"><div class="gal" id="gal"></div></div></section>
+</main>
+<dialog id="lb" aria-label="Galeri"><div class="st"><img id="lb-img" alt=""></div>
+<button class="x" id="lb-x" aria-label="Kapat">×</button><button class="p" id="lb-p" aria-label="Önceki">‹</button><button class="n" id="lb-n" aria-label="Sonraki">›</button><div class="c" id="lb-c"></div></dialog>
+<div id="site-footer"></div>
+<script src="main.js"></script>
+<script>
+const N=20,gal=document.getElementById('gal'),lb=document.getElementById('lb'),li=document.getElementById('lb-img');
+let i=1;
+gal.innerHTML=Array.from({length:N},(_,k)=>`<button data-i="${k+1}" aria-label="${k+1} / ${N}"><img src="galeri/${k+1}.png" alt="BİLSAS ${k+1}" loading="lazy"></button>`).join('');
+gal.querySelectorAll('img').forEach(im=>im.onerror=()=>im.parentElement.remove());
+function show(n){i=(n+N-1)%N+1;li.src=`galeri/${i}.png`;document.getElementById('lb-c').textContent=`${i} / ${N}`}
+gal.onclick=e=>{const b=e.target.closest('button');if(b){show(+b.dataset.i);lb.showModal()}};
+document.getElementById('lb-x').onclick=()=>lb.close();
+document.getElementById('lb-p').onclick=()=>show(i-1);
+document.getElementById('lb-n').onclick=()=>show(i+1);
+lb.onclick=e=>{if(e.target===lb||e.target.classList.contains('st'))lb.close()};
+lb.addEventListener('keydown',e=>{if(e.key==='ArrowLeft')show(i-1);if(e.key==='ArrowRight')show(i+1)});
+</script></body></html>

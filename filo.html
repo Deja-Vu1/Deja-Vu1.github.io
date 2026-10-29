@@ -1,0 +1,38 @@
+<!DOCTYPE html><html lang="tr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="BİLSAS filosu: 2025 Teknofest İHA ve model uydu projeleri.">
+<meta property="og:type" content="website"><meta property="og:site_name" content="BİLSAS"><meta property="og:locale" content="tr_TR">
+<meta property="og:title" content="Filomuz | BİLSAS"><meta property="og:description" content="BİLSAS filosu: 2025 Teknofest İHA ve model uydu projeleri.">
+<meta property="og:url" content="https://deja-vu1.github.io/filo.html"><meta property="og:image" content="https://deja-vu1.github.io/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image"><meta name="theme-color" content="#0A1428">
+<title data-tr="Filomuz | BİLSAS" data-en="Fleet | BİLSAS">Filomuz | BİLSAS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600&family=Sora:wght@600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css"></head><body>
+<div id="site-header"></div>
+<main>
+<div class="page-head"><div class="wrap"><h1 data-tr="Teknik kabiliyetler ve filomuz" data-en="Technical capabilities and fleet">Teknik kabiliyetler ve filomuz</h1></div></div>
+<section><div class="wrap">
+ <div class="tabs" role="tablist" id="tabs"></div>
+ <div class="spec">
+  <figure><img id="f-img" alt="" onerror="this.style.display='none'"></figure>
+  <div><h2 id="f-name"></h2><p class="muted" id="f-desc"></p><div id="f-bars"></div></div>
+ </div>
+</div></section></main>
+<div id="site-footer"></div>
+<script src="main.js"></script>
+<script>
+/* TODO: değerleri ve görsel adlarını kendi verilerinle değiştir */
+const FLEET=[
+ {img:'filo_2025.jpg',tr:'2025 Teknofest İHA',en:'2025 Teknofest UAV',dtr:'Stabilite ve yük bırakma hassasiyeti ile kendini kanıtlamış, operasyonel kabiliyeti yüksek kıdemli platformumuz.',den:'Our senior platform, proven by its stability and payload-drop precision, with high operational capability.',v:[75,65,70,60]},
+ {img:'filo_uydu.jpg',tr:'Model Uydu',en:'Model Satellite',dtr:'Mühendislik disipliniyle geliştirilen; telemetri veri iletimi, atmosferik analiz ve faydalı yük mekanizmalarını bünyesinde barındıran CubeSat prototipi.',den:'A CubeSat prototype developed with engineering discipline, featuring telemetry data transmission, atmospheric analysis and payload mechanisms.',v:[15,10,95,90]}];
+const BARS=[['Hız','Speed'],['Manevra','Agility'],['Menzil','Range'],['Uçuş Süresi','Endurance']];
+let cur=0;
+function render(){const l=getLang(),f=FLEET[cur];
+ document.getElementById('tabs').innerHTML=FLEET.map((x,i)=>`<button role="tab" aria-selected="${i===cur}" data-i="${i}">${x[l]}</button>`).join('');
+ document.getElementById('f-name').textContent=f[l];
+ document.getElementById('f-desc').textContent=f['d'+l];
+ const im=document.getElementById('f-img');im.style.display='';im.src=f.img;
+ document.getElementById('f-bars').innerHTML=BARS.map((b,i)=>`<div class="bar-row"><div><span>${b[l==='tr'?0:1]}</span><span>${f.v[i]}%</span></div><div class="track"><div class="fillbar" style="width:${f.v[i]}%"></div></div></div>`).join('');}
+document.getElementById('tabs').onclick=e=>{const b=e.target.closest('button');if(b){cur=+b.dataset.i;render()}};
+document.addEventListener('langchange',render);render();
+</script>
+</body></html>
