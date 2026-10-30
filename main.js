@@ -109,3 +109,12 @@ if(c)c.addEventListener('click',()=>{
  if(taps.length>=5){taps=[];run()}
 });
 })();
+
+/* istatistik: goatcounter.com'da ücretsiz hesap aç, kodunu buraya yaz (örn. 'bilsas'). Boşsa hiçbir şey yüklenmez. */
+(function(){
+const GC_CODE='bilsas';
+if(!GC_CODE||location.hostname==='localhost'||location.protocol==='file:')return;
+const s=document.createElement('script');s.async=true;
+s.dataset.goatcounter='https://'+GC_CODE+'.goatcounter.com/count';
+s.src='https://gc.zgo.at/count.js';document.head.append(s);
+})();
