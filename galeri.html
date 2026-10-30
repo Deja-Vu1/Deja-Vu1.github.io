@@ -19,9 +19,9 @@
 <script>
 const N=15,gal=document.getElementById('gal'),lb=document.getElementById('lb'),li=document.getElementById('lb-img');
 let i=1;
-gal.innerHTML=Array.from({length:N},(_,k)=>`<button data-i="${k+1}" aria-label="${k+1} / ${N}"><img src="galeri/${k+1}.png" alt="BİLSAS ${k+1}" loading="lazy"></button>`).join('');
+gal.innerHTML=Array.from({length:N},(_,k)=>`<button data-i="${k+1}" aria-label="${k+1} / ${N}"><img src="galeri/${k+1}.jpg" alt="BİLSAS ${k+1}" loading="lazy"></button>`).join('');
 gal.querySelectorAll('img').forEach(im=>im.onerror=()=>im.parentElement.remove());
-function show(n){i=(n+N-1)%N+1;li.src=`galeri/${i}.png`;document.getElementById('lb-c').textContent=`${i} / ${N}`}
+function show(n){i=(n+N-1)%N+1;li.src=`galeri/${i}.jpg`;document.getElementById('lb-c').textContent=`${i} / ${N}`}
 gal.onclick=e=>{const b=e.target.closest('button');if(b){show(+b.dataset.i);lb.showModal()}};
 document.getElementById('lb-x').onclick=()=>lb.close();
 document.getElementById('lb-p').onclick=()=>show(i-1);
